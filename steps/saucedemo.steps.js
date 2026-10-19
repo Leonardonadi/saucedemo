@@ -1,5 +1,6 @@
 const { expect } = require('@playwright/test')
 const { createBdd } = require('playwright-bdd')
+const { SauceDemoPage } = require('../pages/SauceDemoPage')
 
 const { Given, When, Then } = createBdd()
 
@@ -151,4 +152,281 @@ Then('o carrinho indica dois produtos e contém ambos', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'Cart, 2' })).toBeVisible()
   await expect(page.getByText('Sauce Labs Backpack', { exact: true })).toBeVisible()
   await expect(page.getByText('Sauce Labs Bike Light', { exact: true })).toBeVisible()
+})
+
+When('ordeno produtos alfabeticamente de A a Z', async ({ page }) => {
+  await new SauceDemoPage(page).sortProducts('az')
+})
+
+Then('os produtos são exibidos em ordem crescente de nome', async ({ page }) => {
+  await new SauceDemoPage(page).expectProductNamesSorted('asc')
+})
+
+When('ordeno produtos do preço mais alto para o mais baixo', async ({ page }) => {
+  await new SauceDemoPage(page).sortProducts('hilo')
+})
+
+Then('os produtos são exibidos em ordem decrescente de preço', async ({ page }) => {
+  await new SauceDemoPage(page).expectPricesSorted('desc')
+})
+
+Then('o catálogo apresenta seis produtos', async ({ page }) => {
+  await new SauceDemoPage(page).expectProductCount(6)
+})
+
+When('abro os detalhes da mochila Sauce Labs', async ({ page }) => {
+  await new SauceDemoPage(page).openBackpackDetails()
+})
+
+Then('vejo os detalhes da mochila Sauce Labs', async ({ page }) => {
+  await expect(page.locator('.inventory_details_name'))
+    .toHaveText('Sauce Labs Backpack')
+  await expect(page.locator('.inventory_details_desc')).toBeVisible()
+  await expect(page.locator('.inventory_details_price')).toBeVisible()
+})
+
+When('volto aos produtos a partir dos detalhes', async ({ page }) => {
+  await new SauceDemoPage(page).returnToProducts()
+})
+
+Then('retorno ao catálogo de produtos', async ({ page }) => {
+  await expect(page.locator('.inventory_item')).toHaveCount(6)
+})
+
+When('adiciono e removo a mochila diretamente no catálogo', async ({ page }) => {
+  await new SauceDemoPage(page).addAndRemoveBackpackFromCatalog()
+})
+
+Then('a mochila não permanece no carrinho nem selecionada no catálogo', async ({ page }) => {
+  const backpack = page.locator('.inventory_item').filter({
+    hasText: 'Sauce Labs Backpack',
+  })
+  await expect(page.locator('.shopping_cart_badge')).toHaveCount(0)
+  await expect(backpack.getByRole('button', { name: 'Add to cart' })).toBeVisible()
+})
+
+When('preencho apenas o primeiro nome no checkout', async ({ page }) => {
+  await new SauceDemoPage(page).fillFirstNameAndContinue()
+})
+
+Then('vejo uma mensagem informando que o sobrenome é obrigatório', async ({ page }) => {
+  await new SauceDemoPage(page).expectCheckoutError('Last Name is required')
+})
+
+When('continuo o checkout sem informar o código postal', async ({ page }) => {
+  await new SauceDemoPage(page).fillNameAndContinueWithoutPostalCode()
+})
+
+Then('vejo uma mensagem informando que o código postal é obrigatório', async ({ page }) => {
+  await new SauceDemoPage(page).expectCheckoutError('Postal Code is required')
+})
+
+When('preencho os dados e avanço para revisão do pedido', async ({ page }) => {
+  await new SauceDemoPage(page).fillCheckoutDetailsAndContinue()
+})
+
+Then('o resumo da compra apresenta subtotal, imposto e total consistentes', async ({ page }) => {
+  await new SauceDemoPage(page).expectConsistentOrderTotals()
+})
+
+Given('tenho um produto na etapa de revisão do checkout', async ({ page }) => {
+  await new SauceDemoPage(page).openBackpackOrderReview()
+})
+
+When('cancelo a revisão e volto à lista de produtos', async ({ page }) => {
+  await new SauceDemoPage(page).cancelOrderReview()
+})
+
+Then('a mochila permanece selecionada no catálogo', async ({ page }) => {
+  const backpack = page.locator('.inventory_item').filter({
+    hasText: 'Sauce Labs Backpack',
+  })
+  await expect(page).toHaveURL(/inventory\.html/)
+  await expect(page.locator('.shopping_cart_badge')).toHaveText('1')
+  await expect(backpack.getByRole('button', { name: 'Remove' })).toBeVisible()
+})
+
+When('finalizo a compra e retorno à lista de produtos', async ({ page }) => {
+  await new SauceDemoPage(page).completeOrderAndReturnToProducts()
+})
+
+Then('retorno ao catálogo com o carrinho vazio', async ({ page }) => {
+  await new SauceDemoPage(page).expectEmptyCatalogCart()
+})
+
+When('tento entrar sem informar o nome de usuário', async ({ page }) => {
+  await new SauceDemoPage(page).attemptLoginWithoutUsername()
+})
+
+Then('vejo uma mensagem informando que o nome de usuário é obrigatório', async ({ page }) => {
+  await new SauceDemoPage(page).expectLoginError('Username is required')
+})
+
+When('tento entrar sem informar a senha', async ({ page }) => {
+  await new SauceDemoPage(page).attemptLoginWithoutPassword()
+})
+
+Then('vejo uma mensagem informando que a senha é obrigatória', async ({ page }) => {
+  await new SauceDemoPage(page).expectLoginError('Password is required')
+})
+
+Then('o campo de senha oculta os caracteres digitados', async ({ page }) => {
+  await new SauceDemoPage(page).expectPasswordMasked()
+})
+
+When('abro o carrinho sem produtos', async ({ page }) => {
+  await new SauceDemoPage(page).openEmptyCart()
+})
+
+Then('o carrinho está vazio e permite continuar comprando', async ({ page }) => {
+  await new SauceDemoPage(page).expectEmptyCartCanContinueShopping()
+})
+
+Then('retorno à lista de produtos', async ({ page }) => {
+  await expect(page).toHaveURL(/inventory\.html/)
+  await expect(page.getByText('Products', { exact: true })).toBeVisible()
+})
+
+When('abro os detalhes da mochila e a adiciono ao carrinho', async ({ page }) => {
+  await new SauceDemoPage(page).addBackpackFromDetails()
+})
+
+Then('os detalhes indicam que a mochila foi adicionada', async ({ page }) => {
+  await expect(page.locator('.shopping_cart_badge')).toHaveText('1')
+  await expect(page.getByRole('button', { name: 'Remove' })).toBeVisible()
+})
+
+Then('a mochila continua selecionada no catálogo', async ({ page }) => {
+  await new SauceDemoPage(page).expectBackpackSelectedInCatalog()
+})
+
+When('adiciono a mochila e a luz de bicicleta e removo a mochila no carrinho', async ({ page }) => {
+  await new SauceDemoPage(page).removeBackpackFromTwoItemCart()
+})
+
+Then('a luz de bicicleta permanece como único produto no carrinho', async ({ page }) => {
+  await new SauceDemoPage(page).expectBikeLightIsOnlyCartItem()
+})
+
+When('adiciono a mochila e redefino o estado da loja pelo menu', async ({ page }) => {
+  await new SauceDemoPage(page).resetStoreState()
+})
+
+Then('o carrinho e os produtos selecionados são redefinidos', async ({ page }) => {
+  await new SauceDemoPage(page).expectStoreStateReset()
+})
+
+When('cancelo o preenchimento dos dados do checkout', async ({ page }) => {
+  await new SauceDemoPage(page).cancelCheckoutInformation()
+})
+
+Then('retorno ao carrinho com a mochila Sauce Labs', async ({ page }) => {
+  await expect(page).toHaveURL(/cart\.html/)
+  await expect(page.locator('.cart_item').filter({
+    hasText: 'Sauce Labs Backpack',
+  })).toBeVisible()
+})
+
+When('abro os detalhes da mochila para conferir o preço', async ({ page }) => {
+  await new SauceDemoPage(page).openBackpackDetails()
+})
+
+Then('o preço da mochila corresponde ao exibido no catálogo', async ({ page }) => {
+  await new SauceDemoPage(page).expectBackpackPriceMatchesCatalog()
+})
+
+When('adiciono dois produtos e avanço para a revisão do checkout', async ({ page }) => {
+  await new SauceDemoPage(page).addTwoProductsAndOpenOrderReview()
+})
+
+Then('a revisão apresenta os dois produtos selecionados', async ({ page }) => {
+  await new SauceDemoPage(page).expectBothProductsInOrderReview()
+})
+
+When('abro os detalhes da mochila e volto pelo navegador', async ({ page }) => {
+  await new SauceDemoPage(page).returnToCatalogWithBrowserBack()
+})
+
+When('encerro a sessão e tento abrir diretamente o catálogo', async ({ page }) => {
+  await new SauceDemoPage(page).logoutAndOpenCatalogDirectly()
+})
+
+Then('sou redirecionado para a página de login', async ({ page }) => {
+  await new SauceDemoPage(page).expectLoginPage()
+})
+
+When('informo credenciais válidas e pressiono Enter', async ({ page }) => {
+  await new SauceDemoPage(page).loginUsingEnter()
+})
+
+Then('acesso a lista de produtos', async ({ page }) => {
+  await expect(page).toHaveURL(/inventory\.html/)
+  await expect(page.getByText('Products', { exact: true })).toBeVisible()
+})
+
+When('tento entrar com usuário válido e senha incorreta', async ({ page }) => {
+  await new SauceDemoPage(page).attemptLoginWithWrongPassword()
+})
+
+Then('cada produto apresenta imagem, nome, descrição e preço', async ({ page }) => {
+  await new SauceDemoPage(page).expectEveryProductHasCatalogDetails()
+})
+
+When('consulto os detalhes de cada produto', async ({ page }) => {
+  await new SauceDemoPage(page).inspectEveryProductDetails()
+})
+
+Then('cada página de detalhes corresponde ao produto selecionado', async ({ page }) => {
+  await expect(page).toHaveURL(/inventory\.html/)
+  await expect(page.locator('.inventory_item')).toHaveCount(6)
+})
+
+When('adiciono todos os produtos ao carrinho', async ({ page }) => {
+  await new SauceDemoPage(page).addAllProductsToCart()
+})
+
+Then('o carrinho contém os seis produtos do catálogo', async ({ page }) => {
+  await expect(page).toHaveURL(/cart\.html/)
+  await expect(page.locator('.cart_item')).toHaveCount(6)
+})
+
+When('avanço para a revisão com a mochila e a luz de bicicleta', async ({ page }) => {
+  await new SauceDemoPage(page).openTwoProductOrderReview()
+})
+
+Then('o subtotal corresponde à soma dos preços dos dois produtos', async ({ page }) => {
+  await new SauceDemoPage(page).expectTwoProductSubtotal()
+})
+
+When('avanço para a revisão do pedido com um produto', async ({ page }) => {
+  await new SauceDemoPage(page).openOneProductOrderReview()
+})
+
+Then('vejo as informações de pagamento e envio no resumo', async ({ page }) => {
+  await new SauceDemoPage(page).expectPaymentAndShippingInformation()
+})
+
+When('cancelo a revisão do pedido', async ({ page }) => {
+  await new SauceDemoPage(page).cancelOrderReviewAndReturnToCatalog()
+})
+
+Then('os dois produtos continuam selecionados no catálogo', async ({ page }) => {
+  await expect(page).toHaveURL(/inventory\.html/)
+  await expect(page.getByRole('button', { name: 'Cart, 2' })).toBeVisible()
+  for (const name of ['Sauce Labs Backpack', 'Sauce Labs Bike Light']) {
+    await expect(page.locator('.inventory_item').filter({ hasText: name })
+      .getByRole('button', { name: 'Remove' })).toBeVisible()
+  }
+})
+
+When('abro os detalhes do primeiro produto ordenado alfabeticamente e volto pelo navegador',
+  async ({ page }) => {
+    const sauceDemo = new SauceDemoPage(page)
+    await sauceDemo.sortAlphabeticallyAndOpenFirstProduct()
+    await sauceDemo.returnToAlphabeticallySortedCatalogWithBrowserBack()
+  })
+
+Then('o catálogo continua ordenado alfabeticamente', async ({ page }) => {
+  await expect(page.getByRole('combobox')).toHaveValue('az')
+  await new SauceDemoPage(page).expectProductNamesSorted('asc')
 })

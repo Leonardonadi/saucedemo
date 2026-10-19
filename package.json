@@ -7,7 +7,7 @@
     "test": "bddgen && playwright test",
     "test:headed": "bddgen && playwright test --headed",
     "test:ui": "bddgen && playwright test --ui",
-    "test:report": "playwright show-report"
+    "test:report": "playwright show-report --port 9324"
   },
   "devDependencies": {
     "@playwright/test": "^1.64.0",

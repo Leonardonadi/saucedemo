@@ -11,7 +11,10 @@ const testDir = defineBddConfig({
 module.exports = defineConfig({
   testDir,
   fullyParallel: true,
-  reporter: 'list',
+  reporter: [
+    ['list'],
+    ['html', { outputFolder: 'playwright-report', open: 'never' }],
+  ],
   use: {
     baseURL: 'https://www.saucedemo.com',
     trace: 'on-first-retry',

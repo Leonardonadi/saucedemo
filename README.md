@@ -40,6 +40,18 @@ npx playwright install chromium
 npm test
 ```
 
+O comando `npm test` gera o relatório HTML em `playwright-report`. Para abri-lo
+depois que a execução terminar, use:
+
+```powershell
+npm run test:report
+```
+
+`npx playwright show-report` também abre o relatório, mas só funciona depois
+que uma execução de testes tiver gerado a pasta `playwright-report`.
+O script `npm run test:report` usa a porta `9324` para evitar conflito quando
+a porta padrão `9323` já estiver ocupada.
+
 Para executar com o navegador visível ou abrir a interface interativa:
 
 ```powershell
