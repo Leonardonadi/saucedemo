@@ -496,6 +496,96 @@ class SauceDemoPage {
       await expect(item.locator('.inventory_item_price')).toHaveText(price)
     }
   }
+
+  async addBackpackAndReloadCatalog() {
+    const backpack = this.page.locator('.inventory_item').filter({
+      hasText: 'Sauce Labs Backpack',
+    })
+    await backpack.getByRole('button', { name: 'Add to cart' }).click()
+    await this.page.reload()
+    await expect(this.page).toHaveURL(/inventory\.html/)
+  }
+
+  async expectBackpackStillInCartAfterReload() {
+    await expect(this.page.locator('.shopping_cart_badge')).toHaveText('1')
+    await expect(this.page.locator('.inventory_item').filter({
+      hasText: 'Sauce Labs Backpack',
+    }).getByRole('button', { name: 'Remove' })).toBeVisible()
+    await this.page.locator('.shopping_cart_link').click()
+    await expect(this.page.locator('.cart_item').filter({
+      hasText: 'Sauce Labs Backpack',
+    })).toBeVisible()
+  }
+
+  async addBackpackAndOpenCart() {
+    const backpack = this.page.locator('.inventory_item').filter({
+      hasText: 'Sauce Labs Backpack',
+    })
+    await backpack.getByRole('button', { name: 'Add to cart' }).click()
+    await this.page.locator('.shopping_cart_link').click()
+    await expect(this.page).toHaveURL(/cart\.html/)
+  }
+
+  async expectBackpackCartPrice() {
+    const backpack = this.page.locator('.cart_item').filter({
+      hasText: 'Sauce Labs Backpack',
+    })
+    await expect(backpack.locator('.inventory_item_price')).toHaveText('$29.99')
+  }
+
+  async expectTwoProductTaxAndTotal() {
+    const subtotalText = await this.page.locator('.summary_subtotal_label').textContent()
+    const taxText = await this.page.locator('.summary_tax_label').textContent()
+    const totalText = await this.page.locator('.summary_total_label').textContent()
+    const amount = (text) => Number(text.match(/\$([\d.]+)/)[1])
+    const subtotal = amount(subtotalText)
+    const tax = amount(taxText)
+    const total = amount(totalText)
+    const expectedTax = Math.round(subtotal * 0.08 * 100) / 100
+
+    expect(subtotal).toBe(39.98)
+    expect(tax).toBe(expectedTax)
+    expect(total).toBe(Math.round((subtotal + expectedTax) * 100) / 100)
+  }
+
+  async openOrderReviewWithShippingDetails() {
+    await this.openOneProductOrderReview()
+  }
+
+  async expectExpectedPaymentAndShippingDetails() {
+    await expect(this.page.locator('.summary_value_label').nth(0))
+      .toHaveText('SauceCard #31337')
+    await expect(this.page.locator('.summary_value_label').nth(1))
+      .toHaveText('Free Pony Express Delivery!')
+  }
+
+  async logoutAndOpenCartDirectly() {
+    const backpack = this.page.locator('.inventory_item').filter({
+      hasText: 'Sauce Labs Backpack',
+    })
+    await backpack.getByRole('button', { name: 'Add to cart' }).click()
+    await this.page.getByRole('button', { name: 'Open Menu' }).click()
+    await this.page.getByRole('button', { name: 'Logout' }).click()
+    await this.page.goto('/cart.html')
+  }
+
+  async addAllProductsAndCheckRemoveButtons() {
+    const products = this.page.locator('.inventory_item')
+    const count = await products.count()
+    for (let index = 0; index < count; index += 1) {
+      await products.nth(index).getByRole('button', { name: 'Add to cart' }).click()
+    }
+    await expect(this.page.locator('.shopping_cart_badge')).toHaveText(String(count))
+  }
+
+  async expectAllProductsCanBeRemoved() {
+    const products = this.page.locator('.inventory_item')
+    await expect(products).toHaveCount(6)
+    for (let index = 0; index < 6; index += 1) {
+      await expect(products.nth(index).getByRole('button', { name: 'Remove' }))
+        .toBeVisible()
+    }
+  }
 }
 
 module.exports = { SauceDemoPage }

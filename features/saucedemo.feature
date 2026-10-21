@@ -265,3 +265,33 @@ Funcionalidade: Compra de produtos no SauceDemo
     Dado que acesso o SauceDemo com um usuário válido
     Quando avanço para a revisão com a mochila e a luz de bicicleta
     Então os preços da revisão correspondem aos preços do catálogo
+
+  Cenário: Manter o produto no carrinho após atualizar a página
+    Dado que acesso o SauceDemo com um usuário válido
+    Quando adiciono a mochila ao carrinho e atualizo a página
+    Então a mochila continua no carrinho após a atualização
+
+  Cenário: Conferir o preço do produto no carrinho
+    Dado que acesso o SauceDemo com um usuário válido
+    Quando adiciono a mochila e abro o carrinho para conferir o preço
+    Então o preço da mochila no carrinho é 29,99 dólares
+
+  Cenário: Conferir o cálculo do imposto para dois produtos
+    Dado que acesso o SauceDemo com um usuário válido
+    Quando avanço para a revisão com a mochila e a luz de bicicleta
+    Então o imposto e o total correspondem aos valores dos dois produtos
+
+  Cenário: Conferir os valores de envio informados no resumo
+    Dado que acesso o SauceDemo com um usuário válido
+    Quando avanço para a revisão com dados de envio definidos
+    Então o resumo exibe as informações de pagamento e entrega esperadas
+
+  Cenário: Bloquear o acesso ao carrinho após encerrar a sessão
+    Dado que acesso o SauceDemo com um usuário válido
+    Quando encerro a sessão e tento abrir diretamente o carrinho
+    Então sou redirecionado para a página de login
+
+  Cenário: Atualizar o estado dos botões dos seis produtos ao adicioná-los
+    Dado que acesso o SauceDemo com um usuário válido
+    Quando adiciono os seis produtos ao carrinho
+    Então cada produto exibe a opção para removê-lo do carrinho

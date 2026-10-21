@@ -481,3 +481,43 @@ Then('cada produto da revisão apresenta quantidade um', async ({ page }) => {
 Then('os preços da revisão correspondem aos preços do catálogo', async ({ page }) => {
   await new SauceDemoPage(page).expectReviewPricesMatchCatalog()
 })
+
+When('adiciono a mochila ao carrinho e atualizo a página', async ({ page }) => {
+  await new SauceDemoPage(page).addBackpackAndReloadCatalog()
+})
+
+Then('a mochila continua no carrinho após a atualização', async ({ page }) => {
+  await new SauceDemoPage(page).expectBackpackStillInCartAfterReload()
+})
+
+When('adiciono a mochila e abro o carrinho para conferir o preço', async ({ page }) => {
+  await new SauceDemoPage(page).addBackpackAndOpenCart()
+})
+
+Then('o preço da mochila no carrinho é 29,99 dólares', async ({ page }) => {
+  await new SauceDemoPage(page).expectBackpackCartPrice()
+})
+
+Then('o imposto e o total correspondem aos valores dos dois produtos', async ({ page }) => {
+  await new SauceDemoPage(page).expectTwoProductTaxAndTotal()
+})
+
+When('avanço para a revisão com dados de envio definidos', async ({ page }) => {
+  await new SauceDemoPage(page).openOrderReviewWithShippingDetails()
+})
+
+Then('o resumo exibe as informações de pagamento e entrega esperadas', async ({ page }) => {
+  await new SauceDemoPage(page).expectExpectedPaymentAndShippingDetails()
+})
+
+When('encerro a sessão e tento abrir diretamente o carrinho', async ({ page }) => {
+  await new SauceDemoPage(page).logoutAndOpenCartDirectly()
+})
+
+When('adiciono os seis produtos ao carrinho', async ({ page }) => {
+  await new SauceDemoPage(page).addAllProductsAndCheckRemoveButtons()
+})
+
+Then('cada produto exibe a opção para removê-lo do carrinho', async ({ page }) => {
+  await new SauceDemoPage(page).expectAllProductsCanBeRemoved()
+})
