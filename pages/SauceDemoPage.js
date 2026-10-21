@@ -161,9 +161,11 @@ class SauceDemoPage {
 
   async addBackpackFromDetails() {
     await this.openBackpackDetails()
-    await this.page.getByRole('button', { name: 'Add to cart' }).click()
+    const details = this.page.locator('div.inventory_details')
+    await expect(details).toBeVisible()
+    await details.getByRole('button', { name: 'Add to cart' }).click()
     await expect(this.page.locator('.shopping_cart_badge')).toHaveText('1')
-    await expect(this.page.getByRole('button', { name: 'Remove' })).toBeVisible()
+    await expect(details.getByRole('button', { name: 'Remove' })).toBeVisible()
   }
 
   async expectBackpackSelectedInCatalog() {

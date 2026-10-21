@@ -292,8 +292,10 @@ When('abro os detalhes da mochila e a adiciono ao carrinho', async ({ page }) =>
 })
 
 Then('os detalhes indicam que a mochila foi adicionada', async ({ page }) => {
+  const details = page.locator('div.inventory_details')
+  await expect(details).toBeVisible()
   await expect(page.locator('.shopping_cart_badge')).toHaveText('1')
-  await expect(page.getByRole('button', { name: 'Remove' })).toBeVisible()
+  await expect(details.getByRole('button', { name: 'Remove' })).toBeVisible()
 })
 
 Then('a mochila continua selecionada no catálogo', async ({ page }) => {
