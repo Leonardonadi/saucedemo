@@ -273,6 +273,49 @@ test.describe('Compra de produtos no SauceDemo', () => {
     await Then('o catálogo continua ordenado alfabeticamente', null, { page }); 
   });
 
+  test('Fechar a mensagem de erro de login', async ({ Given, When, Then, page }) => { 
+    await Given('que estou na página de login do SauceDemo', null, { page }); 
+    await When('tento entrar com credenciais inválidas e fecho a mensagem de erro', null, { page }); 
+    await Then('a mensagem de erro é ocultada e permaneço na página de login', null, { page }); 
+  });
+
+  test('Remover um produto do carrinho pela página de detalhes', async ({ Given, When, Then, page }) => { 
+    await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+    await When('adiciono e removo a mochila pela página de detalhes', null, { page }); 
+    await Then('a mochila é removida e os detalhes permitem adicioná-la novamente', null, { page }); 
+  });
+
+  test('Abrir o carrinho diretamente dos detalhes do produto', async ({ Given, When, Then, page }) => { 
+    await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+    await When('adiciono a mochila pelos detalhes e abro o carrinho', null, { page }); 
+    await Then('o carrinho mostra a mochila com quantidade um', null, { page }); 
+  });
+
+  test('Atualizar o contador a cada produto adicionado', async ({ Given, When, Then, page }) => { 
+    await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+    await When('adiciono três produtos diferentes ao carrinho', null, { page }); 
+    await Then('o contador do carrinho acompanha cada produto adicionado', null, { page }); 
+  });
+
+  test('Manter os dados do checkout após erro de validação', async ({ Given, When, Then, And, page }) => { 
+    await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+    await And('tenho um produto no carrinho e inicio o checkout', null, { page }); 
+    await When('envio o checkout com nome e sobrenome, mas sem código postal', null, { page }); 
+    await Then('os nomes permanecem preenchidos e o erro do código postal é exibido', null, { page }); 
+  });
+
+  test('Conferir a quantidade de cada produto na revisão do checkout', async ({ Given, When, Then, page }) => { 
+    await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+    await When('avanço para a revisão com a mochila e a luz de bicicleta', null, { page }); 
+    await Then('cada produto da revisão apresenta quantidade um', null, { page }); 
+  });
+
+  test('Conferir os preços dos produtos na revisão do checkout', async ({ Given, When, Then, page }) => { 
+    await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+    await When('avanço para a revisão com a mochila e a luz de bicicleta', null, { page }); 
+    await Then('os preços da revisão correspondem aos preços do catálogo', null, { page }); 
+  });
+
 });
 
 // == technical section ==
@@ -327,4 +370,11 @@ const bddFileData = [ // bdd-data-start
   {"pwTestLine":257,"pickleLine":217,"tags":[],"steps":[{"pwStepLine":258,"gherkinStepLine":218,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":259,"gherkinStepLine":219,"keywordType":"Action","textWithKeyword":"Quando avanço para a revisão do pedido com um produto","stepMatchArguments":[]},{"pwStepLine":260,"gherkinStepLine":220,"keywordType":"Outcome","textWithKeyword":"Então vejo as informações de pagamento e envio no resumo","stepMatchArguments":[]}]},
   {"pwTestLine":263,"pickleLine":222,"tags":[],"steps":[{"pwStepLine":264,"gherkinStepLine":223,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":265,"gherkinStepLine":224,"keywordType":"Action","textWithKeyword":"Quando avanço para a revisão com a mochila e a luz de bicicleta","stepMatchArguments":[]},{"pwStepLine":266,"gherkinStepLine":225,"keywordType":"Action","textWithKeyword":"E cancelo a revisão do pedido","stepMatchArguments":[]},{"pwStepLine":267,"gherkinStepLine":226,"keywordType":"Outcome","textWithKeyword":"Então os dois produtos continuam selecionados no catálogo","stepMatchArguments":[]}]},
   {"pwTestLine":270,"pickleLine":228,"tags":[],"steps":[{"pwStepLine":271,"gherkinStepLine":229,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":272,"gherkinStepLine":230,"keywordType":"Action","textWithKeyword":"Quando abro os detalhes do primeiro produto ordenado alfabeticamente e volto pelo navegador","stepMatchArguments":[]},{"pwStepLine":273,"gherkinStepLine":231,"keywordType":"Outcome","textWithKeyword":"Então o catálogo continua ordenado alfabeticamente","stepMatchArguments":[]}]},
+  {"pwTestLine":276,"pickleLine":233,"tags":[],"steps":[{"pwStepLine":277,"gherkinStepLine":234,"keywordType":"Context","textWithKeyword":"Dado que estou na página de login do SauceDemo","stepMatchArguments":[]},{"pwStepLine":278,"gherkinStepLine":235,"keywordType":"Action","textWithKeyword":"Quando tento entrar com credenciais inválidas e fecho a mensagem de erro","stepMatchArguments":[]},{"pwStepLine":279,"gherkinStepLine":236,"keywordType":"Outcome","textWithKeyword":"Então a mensagem de erro é ocultada e permaneço na página de login","stepMatchArguments":[]}]},
+  {"pwTestLine":282,"pickleLine":238,"tags":[],"steps":[{"pwStepLine":283,"gherkinStepLine":239,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":284,"gherkinStepLine":240,"keywordType":"Action","textWithKeyword":"Quando adiciono e removo a mochila pela página de detalhes","stepMatchArguments":[]},{"pwStepLine":285,"gherkinStepLine":241,"keywordType":"Outcome","textWithKeyword":"Então a mochila é removida e os detalhes permitem adicioná-la novamente","stepMatchArguments":[]}]},
+  {"pwTestLine":288,"pickleLine":243,"tags":[],"steps":[{"pwStepLine":289,"gherkinStepLine":244,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":290,"gherkinStepLine":245,"keywordType":"Action","textWithKeyword":"Quando adiciono a mochila pelos detalhes e abro o carrinho","stepMatchArguments":[]},{"pwStepLine":291,"gherkinStepLine":246,"keywordType":"Outcome","textWithKeyword":"Então o carrinho mostra a mochila com quantidade um","stepMatchArguments":[]}]},
+  {"pwTestLine":294,"pickleLine":248,"tags":[],"steps":[{"pwStepLine":295,"gherkinStepLine":249,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":296,"gherkinStepLine":250,"keywordType":"Action","textWithKeyword":"Quando adiciono três produtos diferentes ao carrinho","stepMatchArguments":[]},{"pwStepLine":297,"gherkinStepLine":251,"keywordType":"Outcome","textWithKeyword":"Então o contador do carrinho acompanha cada produto adicionado","stepMatchArguments":[]}]},
+  {"pwTestLine":300,"pickleLine":253,"tags":[],"steps":[{"pwStepLine":301,"gherkinStepLine":254,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":302,"gherkinStepLine":255,"keywordType":"Context","textWithKeyword":"E tenho um produto no carrinho e inicio o checkout","stepMatchArguments":[]},{"pwStepLine":303,"gherkinStepLine":256,"keywordType":"Action","textWithKeyword":"Quando envio o checkout com nome e sobrenome, mas sem código postal","stepMatchArguments":[]},{"pwStepLine":304,"gherkinStepLine":257,"keywordType":"Outcome","textWithKeyword":"Então os nomes permanecem preenchidos e o erro do código postal é exibido","stepMatchArguments":[]}]},
+  {"pwTestLine":307,"pickleLine":259,"tags":[],"steps":[{"pwStepLine":308,"gherkinStepLine":260,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":309,"gherkinStepLine":261,"keywordType":"Action","textWithKeyword":"Quando avanço para a revisão com a mochila e a luz de bicicleta","stepMatchArguments":[]},{"pwStepLine":310,"gherkinStepLine":262,"keywordType":"Outcome","textWithKeyword":"Então cada produto da revisão apresenta quantidade um","stepMatchArguments":[]}]},
+  {"pwTestLine":313,"pickleLine":264,"tags":[],"steps":[{"pwStepLine":314,"gherkinStepLine":265,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":315,"gherkinStepLine":266,"keywordType":"Action","textWithKeyword":"Quando avanço para a revisão com a mochila e a luz de bicicleta","stepMatchArguments":[]},{"pwStepLine":316,"gherkinStepLine":267,"keywordType":"Outcome","textWithKeyword":"Então os preços da revisão correspondem aos preços do catálogo","stepMatchArguments":[]}]},
 ]; // bdd-data-end

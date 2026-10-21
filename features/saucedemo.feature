@@ -229,3 +229,39 @@ Funcionalidade: Compra de produtos no SauceDemo
     Dado que acesso o SauceDemo com um usuário válido
     Quando abro os detalhes do primeiro produto ordenado alfabeticamente e volto pelo navegador
     Então o catálogo continua ordenado alfabeticamente
+
+  Cenário: Fechar a mensagem de erro de login
+    Dado que estou na página de login do SauceDemo
+    Quando tento entrar com credenciais inválidas e fecho a mensagem de erro
+    Então a mensagem de erro é ocultada e permaneço na página de login
+
+  Cenário: Remover um produto do carrinho pela página de detalhes
+    Dado que acesso o SauceDemo com um usuário válido
+    Quando adiciono e removo a mochila pela página de detalhes
+    Então a mochila é removida e os detalhes permitem adicioná-la novamente
+
+  Cenário: Abrir o carrinho diretamente dos detalhes do produto
+    Dado que acesso o SauceDemo com um usuário válido
+    Quando adiciono a mochila pelos detalhes e abro o carrinho
+    Então o carrinho mostra a mochila com quantidade um
+
+  Cenário: Atualizar o contador a cada produto adicionado
+    Dado que acesso o SauceDemo com um usuário válido
+    Quando adiciono três produtos diferentes ao carrinho
+    Então o contador do carrinho acompanha cada produto adicionado
+
+  Cenário: Manter os dados do checkout após erro de validação
+    Dado que acesso o SauceDemo com um usuário válido
+    E tenho um produto no carrinho e inicio o checkout
+    Quando envio o checkout com nome e sobrenome, mas sem código postal
+    Então os nomes permanecem preenchidos e o erro do código postal é exibido
+
+  Cenário: Conferir a quantidade de cada produto na revisão do checkout
+    Dado que acesso o SauceDemo com um usuário válido
+    Quando avanço para a revisão com a mochila e a luz de bicicleta
+    Então cada produto da revisão apresenta quantidade um
+
+  Cenário: Conferir os preços dos produtos na revisão do checkout
+    Dado que acesso o SauceDemo com um usuário válido
+    Quando avanço para a revisão com a mochila e a luz de bicicleta
+    Então os preços da revisão correspondem aos preços do catálogo

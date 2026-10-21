@@ -403,6 +403,99 @@ class SauceDemoPage {
     await expect(this.page.getByRole('combobox')).toHaveValue('az')
     await this.expectProductNamesSorted('asc')
   }
+
+  async attemptLoginWithInvalidCredentialsAndDismissError() {
+    await this.page.getByPlaceholder('Username').fill('usuario_invalido')
+    await this.page.getByPlaceholder('Password').fill('senha_invalida')
+    await this.page.getByRole('button', { name: 'Login' }).click()
+    await expect(this.page.locator('[data-test="error"]')).toBeVisible()
+    await this.page.locator('[data-test="error-button"]').click()
+  }
+
+  async expectLoginErrorDismissed() {
+    await expect(this.page.locator('[data-test="error"]')).toHaveCount(0)
+    await expect(this.page.getByRole('button', { name: 'Login' })).toBeVisible()
+  }
+
+  async addAndRemoveBackpackOnDetails() {
+    await this.openBackpackDetails()
+    const details = this.page.locator('div.inventory_details')
+    await details.getByRole('button', { name: 'Add to cart' }).click()
+    await expect(details.getByRole('button', { name: 'Remove' })).toBeVisible()
+    await expect(this.page.locator('.shopping_cart_badge')).toHaveText('1')
+    await details.getByRole('button', { name: 'Remove' }).click()
+  }
+
+  async expectBackpackRemovedOnDetails() {
+    const details = this.page.locator('div.inventory_details')
+    await expect(details.getByRole('button', { name: 'Add to cart' })).toBeVisible()
+    await expect(this.page.locator('.shopping_cart_badge')).toHaveCount(0)
+  }
+
+  async addBackpackOnDetailsAndOpenCart() {
+    await this.openBackpackDetails()
+    const details = this.page.locator('div.inventory_details')
+    await details.getByRole('button', { name: 'Add to cart' }).click()
+    await this.page.locator('.shopping_cart_link').click()
+    await expect(this.page).toHaveURL(/cart\.html/)
+  }
+
+  async expectBackpackCartQuantityOne() {
+    const backpack = this.page.locator('.cart_item').filter({
+      hasText: 'Sauce Labs Backpack',
+    })
+    await expect(this.page.locator('.cart_item')).toHaveCount(1)
+    await expect(backpack.locator('.cart_quantity')).toHaveText('1')
+  }
+
+  async addThreeProductsAndCheckBadge() {
+    const names = [
+      'Sauce Labs Backpack',
+      'Sauce Labs Bike Light',
+      'Sauce Labs Bolt T-Shirt',
+    ]
+    for (let index = 0; index < names.length; index += 1) {
+      const product = this.page.locator('.inventory_item').filter({
+        hasText: names[index],
+      })
+      await product.getByRole('button', { name: 'Add to cart' }).click()
+      await expect(this.page.locator('.shopping_cart_badge')).toHaveText(String(index + 1))
+    }
+  }
+
+  async submitCheckoutWithoutPostalCode() {
+    await this.page.getByPlaceholder('First Name').fill('Ada')
+    await this.page.getByPlaceholder('Last Name').fill('Lovelace')
+    await this.page.getByRole('button', { name: 'Continue' }).click()
+  }
+
+  async expectCheckoutNamesPreservedAndPostalError() {
+    await this.expectCheckoutError('Postal Code is required')
+    await expect(this.page.getByPlaceholder('First Name')).toHaveValue('Ada')
+    await expect(this.page.getByPlaceholder('Last Name')).toHaveValue('Lovelace')
+    await expect(this.page.getByPlaceholder('Zip/Postal Code')).toHaveValue('')
+  }
+
+  async expectEachReviewItemQuantityOne() {
+    const items = this.page.locator('.cart_item')
+    await expect(items).toHaveCount(2)
+    for (let index = 0; index < 2; index += 1) {
+      await expect(items.nth(index).locator('.cart_quantity')).toHaveText('1')
+    }
+  }
+
+  async expectReviewPricesMatchCatalog() {
+    const expectedPrices = new Map([
+      ['Sauce Labs Backpack', '$29.99'],
+      ['Sauce Labs Bike Light', '$9.99'],
+    ])
+    const items = this.page.locator('.cart_item')
+    await expect(items).toHaveCount(expectedPrices.size)
+    for (const [name, price] of expectedPrices) {
+      const item = items.filter({ hasText: name })
+      await expect(item.locator('.inventory_item_price')).toHaveText(price)
+    }
+  }
 }
 
 module.exports = { SauceDemoPage }

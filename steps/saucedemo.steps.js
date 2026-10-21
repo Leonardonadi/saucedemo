@@ -432,3 +432,52 @@ Then('o catálogo continua ordenado alfabeticamente', async ({ page }) => {
   await expect(page.getByRole('combobox')).toHaveValue('az')
   await new SauceDemoPage(page).expectProductNamesSorted('asc')
 })
+
+When('tento entrar com credenciais inválidas e fecho a mensagem de erro', async ({ page }) => {
+  await new SauceDemoPage(page).attemptLoginWithInvalidCredentialsAndDismissError()
+})
+
+Then('a mensagem de erro é ocultada e permaneço na página de login', async ({ page }) => {
+  await new SauceDemoPage(page).expectLoginErrorDismissed()
+  await expect(page).toHaveURL('/')
+})
+
+When('adiciono e removo a mochila pela página de detalhes', async ({ page }) => {
+  await new SauceDemoPage(page).addAndRemoveBackpackOnDetails()
+})
+
+Then('a mochila é removida e os detalhes permitem adicioná-la novamente', async ({ page }) => {
+  await new SauceDemoPage(page).expectBackpackRemovedOnDetails()
+})
+
+When('adiciono a mochila pelos detalhes e abro o carrinho', async ({ page }) => {
+  await new SauceDemoPage(page).addBackpackOnDetailsAndOpenCart()
+})
+
+Then('o carrinho mostra a mochila com quantidade um', async ({ page }) => {
+  await new SauceDemoPage(page).expectBackpackCartQuantityOne()
+})
+
+When('adiciono três produtos diferentes ao carrinho', async ({ page }) => {
+  await new SauceDemoPage(page).addThreeProductsAndCheckBadge()
+})
+
+Then('o contador do carrinho acompanha cada produto adicionado', async ({ page }) => {
+  await expect(page.locator('.shopping_cart_badge')).toHaveText('3')
+})
+
+When('envio o checkout com nome e sobrenome, mas sem código postal', async ({ page }) => {
+  await new SauceDemoPage(page).submitCheckoutWithoutPostalCode()
+})
+
+Then('os nomes permanecem preenchidos e o erro do código postal é exibido', async ({ page }) => {
+  await new SauceDemoPage(page).expectCheckoutNamesPreservedAndPostalError()
+})
+
+Then('cada produto da revisão apresenta quantidade um', async ({ page }) => {
+  await new SauceDemoPage(page).expectEachReviewItemQuantityOne()
+})
+
+Then('os preços da revisão correspondem aos preços do catálogo', async ({ page }) => {
+  await new SauceDemoPage(page).expectReviewPricesMatchCatalog()
+})
