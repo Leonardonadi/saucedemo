@@ -14,10 +14,12 @@ module.exports = defineConfig({
   reporter: [
     ['list'],
     ['html', { outputFolder: 'playwright-report', open: 'never' }],
+    ['json', { outputFile: 'test-results/results.json' }],
   ],
   use: {
     baseURL: 'https://www.saucedemo.com',
-    trace: 'on-first-retry',
+    trace: 'retain-on-failure',
+    screenshot: 'only-on-failure',
   },
   projects: [
     {
