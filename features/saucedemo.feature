@@ -295,3 +295,142 @@ Funcionalidade: Compra de produtos no SauceDemo
     Dado que acesso o SauceDemo com um usuário válido
     Quando adiciono os seis produtos ao carrinho
     Então cada produto exibe a opção para removê-lo do carrinho
+
+  Cenário: Exibir o catálogo inicialmente em ordem alfabética
+    Dado que acesso o SauceDemo com um usuário válido
+    Então o catálogo inicia ordenado alfabeticamente
+
+  Cenário: Abrir os detalhes de um produto pela imagem
+    Dado que acesso o SauceDemo com um usuário válido
+    Quando abro os detalhes da mochila pela imagem
+    Então vejo os detalhes da mochila Sauce Labs
+
+  Cenário: Impedir duplicidade ao adicionar a mochila
+    Dado que acesso o SauceDemo com um usuário válido
+    Quando adiciono a mochila e verifico a ação disponível
+    Então o carrinho contém apenas uma mochila
+
+  Cenário: Manter o produto selecionado ao alterar a ordenação
+    Dado que acesso o SauceDemo com um usuário válido
+    Quando adiciono a mochila e ordeno os produtos por preço decrescente
+    Então a mochila permanece selecionada após a ordenação
+
+  Cenário: Atualizar o contador ao remover um produto de três
+    Dado que acesso o SauceDemo com um usuário válido
+    Quando adiciono três produtos e removo a luz de bicicleta no carrinho
+    Então o carrinho indica dois produtos restantes
+
+  Cenário: Voltar do carrinho aos detalhes do produto pelo navegador
+    Dado que acesso o SauceDemo com um usuário válido
+    Quando abro os detalhes da mochila a partir do carrinho
+    E volto ao carrinho pelo navegador
+    Então a mochila continua no carrinho
+
+  Cenário: Voltar do carrinho ao catálogo pelo navegador
+    Dado que acesso o SauceDemo com um usuário válido
+    Quando abro o carrinho com a mochila e volto pelo navegador
+    Então a mochila continua selecionada no catálogo
+
+  Cenário: Recuperar o acesso após fechar um erro de login
+    Dado que estou na página de login do SauceDemo
+    Quando fecho o erro de login e entro com credenciais válidas
+    Então acesso a lista de produtos
+
+  Cenário: Corrigir o código postal após fechar o erro do checkout
+    Dado que acesso o SauceDemo com um usuário válido
+    E tenho um produto no carrinho e inicio o checkout
+    Quando fecho o erro de código postal e informo um código válido
+    Então avanço para a revisão com a mochila no pedido
+
+  Cenário: Retomar o checkout após cancelar o preenchimento
+    Dado que acesso o SauceDemo com um usuário válido
+    E tenho um produto no carrinho e inicio o checkout
+    Quando cancelo o preenchimento e inicio o checkout novamente
+    Então o checkout é reaberto com a mochila no carrinho
+
+  Esquema do Cenário: Entrar com cada conta de demonstração válida
+    Dado que estou na página de login do SauceDemo
+    Quando entro com a conta "<usuario>"
+    Então acesso a lista de produtos
+    E o catálogo apresenta seis produtos
+
+    Exemplos:
+      | usuario                 |
+      | standard_user           |
+      | problem_user            |
+      | performance_glitch_user |
+      | error_user              |
+      | visual_user             |
+
+  Esquema do Cenário: Adicionar cada produto individualmente ao carrinho
+    Dado que acesso o SauceDemo com um usuário válido
+    Quando adiciono "<produto>" ao carrinho
+    Então o carrinho contém apenas "<produto>"
+
+    Exemplos:
+      | produto                        |
+      | Sauce Labs Backpack            |
+      | Sauce Labs Bike Light          |
+      | Sauce Labs Bolt T-Shirt         |
+      | Sauce Labs Fleece Jacket       |
+      | Sauce Labs Onesie               |
+      | Test.allTheThings() T-Shirt (Red) |
+
+  Esquema do Cenário: Consultar os detalhes de cada produto individualmente
+    Dado que acesso o SauceDemo com um usuário válido
+    Quando abro os detalhes de "<produto>"
+    Então os detalhes apresentam nome, imagem, descrição e preço de "<produto>"
+
+    Exemplos:
+      | produto                        |
+      | Sauce Labs Backpack            |
+      | Sauce Labs Bike Light          |
+      | Sauce Labs Bolt T-Shirt         |
+      | Sauce Labs Fleece Jacket       |
+      | Sauce Labs Onesie               |
+      | Test.allTheThings() T-Shirt (Red) |
+
+  Esquema do Cenário: Conferir o cálculo do checkout para cada produto
+    Dado que acesso o SauceDemo com um usuário válido
+    Quando avanço para a revisão com "<produto>"
+    Então o subtotal, imposto e total correspondem a "<produto>"
+
+    Exemplos:
+      | produto                        |
+      | Sauce Labs Backpack            |
+      | Sauce Labs Bike Light          |
+      | Sauce Labs Bolt T-Shirt         |
+      | Sauce Labs Fleece Jacket       |
+      | Sauce Labs Onesie               |
+      | Test.allTheThings() T-Shirt (Red) |
+
+  Esquema do Cenário: Remover cada produto do catálogo
+    Dado que acesso o SauceDemo com um usuário válido
+    Quando adiciono e removo "<produto>" no catálogo
+    Então "<produto>" volta a oferecer a opção de adicionar
+
+    Exemplos:
+      | produto                        |
+      | Sauce Labs Backpack            |
+      | Sauce Labs Bike Light          |
+      | Sauce Labs Bolt T-Shirt         |
+      | Sauce Labs Fleece Jacket       |
+      | Sauce Labs Onesie               |
+      | Test.allTheThings() T-Shirt (Red) |
+
+  Esquema do Cenário: Manter o produto no carrinho para cada ordenação
+    Dado que acesso o SauceDemo com um usuário válido
+    Quando adiciono a mochila e aplico a ordenação "<opcao>"
+    Então o catálogo fica ordenado por "<opcao>" e a mochila permanece selecionada
+
+    Exemplos:
+      | opcao |
+      | az    |
+      | za    |
+      | lohi  |
+      | hilo  |
+
+  Cenário: Finalizar a compra da luz de bicicleta
+    Dado que acesso o SauceDemo com um usuário válido
+    Quando finalizo a compra da luz de bicicleta
+    Então a compra é confirmada e o carrinho fica vazio

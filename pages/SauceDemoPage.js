@@ -586,6 +586,284 @@ class SauceDemoPage {
         .toBeVisible()
     }
   }
+
+  async expectDefaultProductOrder() {
+    await expect(this.page.getByRole('combobox')).toHaveValue('az')
+    await this.expectProductNamesSorted('asc')
+  }
+
+  async openBackpackDetailsFromImage() {
+    const backpack = this.page.locator('.inventory_item').filter({
+      hasText: 'Sauce Labs Backpack',
+    })
+    await backpack.getByRole('img', { name: 'Sauce Labs Backpack' }).click()
+    await expect(this.page).toHaveURL(/inventory-item\.html/)
+    await expect(this.page.locator('.inventory_details_name'))
+      .toHaveText('Sauce Labs Backpack')
+  }
+
+  async addBackpackAndCheckRemoveAction() {
+    const backpack = this.page.locator('.inventory_item').filter({
+      hasText: 'Sauce Labs Backpack',
+    })
+    await backpack.getByRole('button', { name: 'Add to cart' }).click()
+    await expect(backpack.getByRole('button', { name: 'Remove' })).toBeVisible()
+    await expect(backpack.getByRole('button', { name: 'Add to cart' })).toHaveCount(0)
+    await expect(this.page.locator('.shopping_cart_badge')).toHaveText('1')
+    await this.page.locator('.shopping_cart_link').click()
+  }
+
+  async expectSingleBackpackInCart() {
+    await expect(this.page).toHaveURL(/cart\.html/)
+    await expect(this.page.locator('.cart_item')).toHaveCount(1)
+    await expect(this.page.locator('.cart_item').getByText('Sauce Labs Backpack', {
+      exact: true,
+    })).toBeVisible()
+    await expect(this.page.locator('.shopping_cart_badge')).toHaveText('1')
+  }
+
+  async addBackpackAndSortByDescendingPrice() {
+    const backpack = this.page.locator('.inventory_item').filter({
+      hasText: 'Sauce Labs Backpack',
+    })
+    await backpack.getByRole('button', { name: 'Add to cart' }).click()
+    await this.sortProducts('hilo')
+  }
+
+  async expectBackpackSelectedAfterSorting() {
+    await expect(this.page.getByRole('combobox')).toHaveValue('hilo')
+    await expect(this.page.locator('.shopping_cart_badge')).toHaveText('1')
+    await expect(this.page.locator('.inventory_item').filter({
+      hasText: 'Sauce Labs Backpack',
+    }).getByRole('button', { name: 'Remove' })).toBeVisible()
+  }
+
+  async removeBikeLightFromThreeItemCart() {
+    const names = [
+      'Sauce Labs Backpack',
+      'Sauce Labs Bike Light',
+      'Sauce Labs Bolt T-Shirt',
+    ]
+    for (const name of names) {
+      const product = this.page.locator('.inventory_item').filter({ hasText: name })
+      await product.getByRole('button', { name: 'Add to cart' }).click()
+    }
+    await this.page.locator('.shopping_cart_link').click()
+    const bikeLight = this.page.locator('.cart_item').filter({
+      hasText: 'Sauce Labs Bike Light',
+    })
+    await bikeLight.getByRole('button', { name: 'Remove' }).click()
+  }
+
+  async expectTwoProductsRemainInCart() {
+    await expect(this.page.locator('.cart_item')).toHaveCount(2)
+    await expect(this.page.locator('.shopping_cart_badge')).toHaveText('2')
+    await expect(this.page.locator('.cart_item').getByText('Sauce Labs Backpack', {
+      exact: true,
+    })).toBeVisible()
+    await expect(this.page.locator('.cart_item').getByText('Sauce Labs Bolt T-Shirt', {
+      exact: true,
+    })).toBeVisible()
+    await expect(this.page.getByText('Sauce Labs Bike Light', { exact: true }))
+      .toHaveCount(0)
+  }
+
+  async openBackpackDetailsFromCart() {
+    const backpack = this.page.locator('.inventory_item').filter({
+      hasText: 'Sauce Labs Backpack',
+    })
+    await backpack.getByRole('button', { name: 'Add to cart' }).click()
+    await this.page.locator('.shopping_cart_link').click()
+    await this.page.locator('.cart_item').getByText('Sauce Labs Backpack', {
+      exact: true,
+    }).click()
+    await expect(this.page).toHaveURL(/inventory-item\.html/)
+    await expect(this.page.locator('.inventory_details_name'))
+      .toHaveText('Sauce Labs Backpack')
+  }
+
+  async returnToCartWithBrowserBack() {
+    await this.page.goBack()
+    await expect(this.page).toHaveURL(/cart\.html/)
+  }
+
+  async expectBackpackInCart() {
+    await expect(this.page.locator('.cart_item')).toHaveCount(1)
+    await expect(this.page.locator('.cart_item').getByText('Sauce Labs Backpack', {
+      exact: true,
+    })).toBeVisible()
+    await expect(this.page.locator('.cart_item .cart_quantity')).toHaveText('1')
+  }
+
+  async returnToCatalogFromCartWithBrowserBack() {
+    const backpack = this.page.locator('.inventory_item').filter({
+      hasText: 'Sauce Labs Backpack',
+    })
+    await backpack.getByRole('button', { name: 'Add to cart' }).click()
+    await this.page.locator('.shopping_cart_link').click()
+    await this.page.goBack()
+    await expect(this.page).toHaveURL(/inventory\.html/)
+  }
+
+  async dismissLoginErrorAndRetry() {
+    await this.attemptLoginWithInvalidCredentialsAndDismissError()
+    await this.loginUsingEnter()
+  }
+
+  async dismissPostalCodeErrorAndRetry() {
+    await this.submitCheckoutWithoutPostalCode()
+    await this.expectCheckoutError('Postal Code is required')
+    await this.page.locator('[data-test="error-button"]').click()
+    await expect(this.page.locator('[data-test="error"]')).toHaveCount(0)
+    await this.page.getByPlaceholder('Zip/Postal Code').fill('12345')
+    await this.page.getByRole('button', { name: 'Continue' }).click()
+  }
+
+  async expectBackpackInOrderReview() {
+    await expect(this.page).toHaveURL(/checkout-step-two\.html/)
+    await expect(this.page.locator('.cart_item')).toHaveCount(1)
+    await expect(this.page.locator('.cart_item').getByText('Sauce Labs Backpack', {
+      exact: true,
+    })).toBeVisible()
+  }
+
+  async cancelAndRestartCheckout() {
+    await this.cancelCheckoutInformation()
+    await this.page.getByRole('button', { name: 'Checkout' }).click()
+    await expect(this.page).toHaveURL(/checkout-step-one\.html/)
+  }
+
+  async expectCheckoutRestartedWithBackpack() {
+    await expect(this.page).toHaveURL(/checkout-step-one\.html/)
+    await expect(this.page.locator('.shopping_cart_badge')).toHaveText('1')
+    await expect(this.page.getByPlaceholder('First Name')).toBeVisible()
+    await expect(this.page.locator('.cart_item').filter({
+      hasText: 'Sauce Labs Backpack',
+    })).toHaveCount(0)
+  }
+
+  async loginWithUsername(username) {
+    await this.page.getByPlaceholder('Username').fill(username)
+    await this.page.getByPlaceholder('Password').fill('secret_sauce')
+    await this.page.getByRole('button', { name: 'Login' }).click()
+    await expect(this.page).toHaveURL(/inventory\.html/)
+  }
+
+  async addProductToCart(productName) {
+    const product = this.page.locator('.inventory_item').filter({ hasText: productName })
+    await product.getByRole('button', { name: 'Add to cart' }).click()
+    await expect(this.page.locator('.shopping_cart_badge')).toHaveText('1')
+    await this.page.locator('.shopping_cart_link').click()
+  }
+
+  async expectOnlyProductInCart(productName) {
+    await expect(this.page).toHaveURL(/cart\.html/)
+    await expect(this.page.locator('.cart_item')).toHaveCount(1)
+    await expect(this.page.locator('.cart_item').getByText(productName, {
+      exact: true,
+    })).toBeVisible()
+    await expect(this.page.locator('.cart_item .cart_quantity')).toHaveText('1')
+    await expect(this.page.locator('.shopping_cart_badge')).toHaveText('1')
+  }
+
+  async openProductDetails(productName) {
+    const product = this.page.locator('.inventory_item').filter({ hasText: productName })
+    await product.getByText(productName, { exact: true }).click()
+    await expect(this.page).toHaveURL(/inventory-item\.html/)
+  }
+
+  async expectProductDetails(productName) {
+    const details = this.page.locator('.inventory_details')
+    await expect(details.locator('.inventory_details_name')).toHaveText(productName)
+    await expect(details.locator('.inventory_details_img')).toBeVisible()
+    await expect(details.locator('.inventory_details_img')).toHaveAttribute(
+      'alt',
+      productName,
+    )
+    await expect(details.locator('.inventory_details_desc')).toHaveText(/\S+/)
+    await expect(details.locator('.inventory_details_price')).toHaveText(/^\$\d+\.\d{2}$/)
+  }
+
+  async openProductOrderReview(productName) {
+    const product = this.page.locator('.inventory_item').filter({ hasText: productName })
+    await product.getByRole('button', { name: 'Add to cart' }).click()
+    await this.page.locator('.shopping_cart_link').click()
+    await this.page.getByRole('button', { name: 'Checkout' }).click()
+    await this.page.getByPlaceholder('First Name').fill('Ada')
+    await this.page.getByPlaceholder('Last Name').fill('Lovelace')
+    await this.page.getByPlaceholder('Zip/Postal Code').fill('12345')
+    await this.page.getByRole('button', { name: 'Continue' }).click()
+    await expect(this.page).toHaveURL(/checkout-step-two\.html/)
+  }
+
+  async expectSingleProductOrderTotals(productName) {
+    const item = this.page.locator('.cart_item').filter({ hasText: productName })
+    await expect(this.page.locator('.cart_item')).toHaveCount(1)
+    await expect(item).toBeVisible()
+    const priceText = await item.locator('.inventory_item_price').textContent()
+    const subtotalText = await this.page.locator('.summary_subtotal_label').textContent()
+    const taxText = await this.page.locator('.summary_tax_label').textContent()
+    const totalText = await this.page.locator('.summary_total_label').textContent()
+    const amount = (text) => Number(text.match(/\$([\d.]+)/)[1])
+    const price = amount(priceText)
+    const subtotal = amount(subtotalText)
+    const tax = amount(taxText)
+    const total = amount(totalText)
+    const expectedTax = Math.round(price * 0.08 * 100) / 100
+
+    expect(subtotal).toBe(price)
+    expect(tax).toBe(expectedTax)
+    expect(total).toBe(Math.round((price + expectedTax) * 100) / 100)
+  }
+
+  async addAndRemoveProductFromCatalog(productName) {
+    const product = this.page.locator('.inventory_item').filter({ hasText: productName })
+    await product.getByRole('button', { name: 'Add to cart' }).click()
+    await expect(product.getByRole('button', { name: 'Remove' })).toBeVisible()
+    await expect(this.page.locator('.shopping_cart_badge')).toHaveText('1')
+    await product.getByRole('button', { name: 'Remove' }).click()
+  }
+
+  async expectProductRemovedFromCatalog(productName) {
+    const product = this.page.locator('.inventory_item').filter({ hasText: productName })
+    await expect(product.getByRole('button', { name: 'Add to cart' })).toBeVisible()
+    await expect(product.getByRole('button', { name: 'Remove' })).toHaveCount(0)
+    await expect(this.page.locator('.shopping_cart_badge')).toHaveCount(0)
+  }
+
+  async addBackpackAndApplySorting(option) {
+    const backpack = this.page.locator('.inventory_item').filter({
+      hasText: 'Sauce Labs Backpack',
+    })
+    await backpack.getByRole('button', { name: 'Add to cart' }).click()
+    await this.sortProducts(option)
+  }
+
+  async expectSortingAndBackpackSelection(option) {
+    await expect(this.page.getByRole('combobox')).toHaveValue(option)
+    if (option === 'az' || option === 'za') {
+      await this.expectProductNamesSorted(option === 'az' ? 'asc' : 'desc')
+    } else {
+      await this.expectPricesSorted(option === 'lohi' ? 'asc' : 'desc')
+    }
+    await expect(this.page.locator('.shopping_cart_badge')).toHaveText('1')
+    await expect(this.page.locator('.inventory_item').filter({
+      hasText: 'Sauce Labs Backpack',
+    }).getByRole('button', { name: 'Remove' })).toBeVisible()
+  }
+
+  async completeBikeLightOrder() {
+    await this.openProductOrderReview('Sauce Labs Bike Light')
+    await this.page.getByRole('button', { name: 'Finish' }).click()
+  }
+
+  async expectOrderConfirmationAndEmptyCart() {
+    await expect(this.page.getByText('Thank you for your order!', { exact: true }))
+      .toBeVisible()
+    await this.page.getByRole('button', { name: 'Back Home' }).click()
+    await expect(this.page).toHaveURL(/inventory\.html/)
+    await expect(this.page.locator('.shopping_cart_badge')).toHaveCount(0)
+  }
 }
 
 module.exports = { SauceDemoPage }

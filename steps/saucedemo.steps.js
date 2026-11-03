@@ -521,3 +521,126 @@ When('adiciono os seis produtos ao carrinho', async ({ page }) => {
 Then('cada produto exibe a opção para removê-lo do carrinho', async ({ page }) => {
   await new SauceDemoPage(page).expectAllProductsCanBeRemoved()
 })
+
+Then('o catálogo inicia ordenado alfabeticamente', async ({ page }) => {
+  await new SauceDemoPage(page).expectDefaultProductOrder()
+})
+
+When('abro os detalhes da mochila pela imagem', async ({ page }) => {
+  await new SauceDemoPage(page).openBackpackDetailsFromImage()
+})
+
+When('adiciono a mochila e verifico a ação disponível', async ({ page }) => {
+  await new SauceDemoPage(page).addBackpackAndCheckRemoveAction()
+})
+
+Then('o carrinho contém apenas uma mochila', async ({ page }) => {
+  await new SauceDemoPage(page).expectSingleBackpackInCart()
+})
+
+When('adiciono a mochila e ordeno os produtos por preço decrescente', async ({ page }) => {
+  await new SauceDemoPage(page).addBackpackAndSortByDescendingPrice()
+})
+
+Then('a mochila permanece selecionada após a ordenação', async ({ page }) => {
+  await new SauceDemoPage(page).expectBackpackSelectedAfterSorting()
+})
+
+When('adiciono três produtos e removo a luz de bicicleta no carrinho', async ({ page }) => {
+  await new SauceDemoPage(page).removeBikeLightFromThreeItemCart()
+})
+
+Then('o carrinho indica dois produtos restantes', async ({ page }) => {
+  await new SauceDemoPage(page).expectTwoProductsRemainInCart()
+})
+
+When('abro os detalhes da mochila a partir do carrinho', async ({ page }) => {
+  await new SauceDemoPage(page).openBackpackDetailsFromCart()
+})
+
+When('volto ao carrinho pelo navegador', async ({ page }) => {
+  await new SauceDemoPage(page).returnToCartWithBrowserBack()
+})
+
+Then('a mochila continua no carrinho', async ({ page }) => {
+  await new SauceDemoPage(page).expectBackpackInCart()
+})
+
+When('abro o carrinho com a mochila e volto pelo navegador', async ({ page }) => {
+  await new SauceDemoPage(page).returnToCatalogFromCartWithBrowserBack()
+})
+
+When('fecho o erro de login e entro com credenciais válidas', async ({ page }) => {
+  await new SauceDemoPage(page).dismissLoginErrorAndRetry()
+})
+
+When('fecho o erro de código postal e informo um código válido', async ({ page }) => {
+  await new SauceDemoPage(page).dismissPostalCodeErrorAndRetry()
+})
+
+Then('avanço para a revisão com a mochila no pedido', async ({ page }) => {
+  await new SauceDemoPage(page).expectBackpackInOrderReview()
+})
+
+When('cancelo o preenchimento e inicio o checkout novamente', async ({ page }) => {
+  await new SauceDemoPage(page).cancelAndRestartCheckout()
+})
+
+Then('o checkout é reaberto com a mochila no carrinho', async ({ page }) => {
+  await new SauceDemoPage(page).expectCheckoutRestartedWithBackpack()
+})
+
+When('entro com a conta {string}', async ({ page }, username) => {
+  await new SauceDemoPage(page).loginWithUsername(username)
+})
+
+When('adiciono {string} ao carrinho', async ({ page }, productName) => {
+  await new SauceDemoPage(page).addProductToCart(productName)
+})
+
+Then('o carrinho contém apenas {string}', async ({ page }, productName) => {
+  await new SauceDemoPage(page).expectOnlyProductInCart(productName)
+})
+
+When('abro os detalhes de {string}', async ({ page }, productName) => {
+  await new SauceDemoPage(page).openProductDetails(productName)
+})
+
+Then('os detalhes apresentam nome, imagem, descrição e preço de {string}',
+  async ({ page }, productName) => {
+    await new SauceDemoPage(page).expectProductDetails(productName)
+  })
+
+When('avanço para a revisão com {string}', async ({ page }, productName) => {
+  await new SauceDemoPage(page).openProductOrderReview(productName)
+})
+
+Then('o subtotal, imposto e total correspondem a {string}',
+  async ({ page }, productName) => {
+    await new SauceDemoPage(page).expectSingleProductOrderTotals(productName)
+  })
+
+When('adiciono e removo {string} no catálogo', async ({ page }, productName) => {
+  await new SauceDemoPage(page).addAndRemoveProductFromCatalog(productName)
+})
+
+Then('{string} volta a oferecer a opção de adicionar', async ({ page }, productName) => {
+  await new SauceDemoPage(page).expectProductRemovedFromCatalog(productName)
+})
+
+When('adiciono a mochila e aplico a ordenação {string}', async ({ page }, option) => {
+  await new SauceDemoPage(page).addBackpackAndApplySorting(option)
+})
+
+Then('o catálogo fica ordenado por {string} e a mochila permanece selecionada',
+  async ({ page }, option) => {
+    await new SauceDemoPage(page).expectSortingAndBackpackSelection(option)
+  })
+
+When('finalizo a compra da luz de bicicleta', async ({ page }) => {
+  await new SauceDemoPage(page).completeBikeLightOrder()
+})
+
+Then('a compra é confirmada e o carrinho fica vazio', async ({ page }) => {
+  await new SauceDemoPage(page).expectOrderConfirmationAndEmptyCart()
+})
