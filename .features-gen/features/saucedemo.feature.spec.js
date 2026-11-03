@@ -352,6 +352,301 @@ test.describe('Compra de produtos no SauceDemo', () => {
     await Then('cada produto exibe a opção para removê-lo do carrinho', null, { page }); 
   });
 
+  test('Exibir o catálogo inicialmente em ordem alfabética', async ({ Given, Then, page }) => { 
+    await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+    await Then('o catálogo inicia ordenado alfabeticamente', null, { page }); 
+  });
+
+  test('Abrir os detalhes de um produto pela imagem', async ({ Given, When, Then, page }) => { 
+    await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+    await When('abro os detalhes da mochila pela imagem', null, { page }); 
+    await Then('vejo os detalhes da mochila Sauce Labs', null, { page }); 
+  });
+
+  test('Impedir duplicidade ao adicionar a mochila', async ({ Given, When, Then, page }) => { 
+    await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+    await When('adiciono a mochila e verifico a ação disponível', null, { page }); 
+    await Then('o carrinho contém apenas uma mochila', null, { page }); 
+  });
+
+  test('Manter o produto selecionado ao alterar a ordenação', async ({ Given, When, Then, page }) => { 
+    await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+    await When('adiciono a mochila e ordeno os produtos por preço decrescente', null, { page }); 
+    await Then('a mochila permanece selecionada após a ordenação', null, { page }); 
+  });
+
+  test('Atualizar o contador ao remover um produto de três', async ({ Given, When, Then, page }) => { 
+    await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+    await When('adiciono três produtos e removo a luz de bicicleta no carrinho', null, { page }); 
+    await Then('o carrinho indica dois produtos restantes', null, { page }); 
+  });
+
+  test('Voltar do carrinho aos detalhes do produto pelo navegador', async ({ Given, When, Then, And, page }) => { 
+    await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+    await When('abro os detalhes da mochila a partir do carrinho', null, { page }); 
+    await And('volto ao carrinho pelo navegador', null, { page }); 
+    await Then('a mochila continua no carrinho', null, { page }); 
+  });
+
+  test('Voltar do carrinho ao catálogo pelo navegador', async ({ Given, When, Then, page }) => { 
+    await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+    await When('abro o carrinho com a mochila e volto pelo navegador', null, { page }); 
+    await Then('a mochila continua selecionada no catálogo', null, { page }); 
+  });
+
+  test('Recuperar o acesso após fechar um erro de login', async ({ Given, When, Then, page }) => { 
+    await Given('que estou na página de login do SauceDemo', null, { page }); 
+    await When('fecho o erro de login e entro com credenciais válidas', null, { page }); 
+    await Then('acesso a lista de produtos', null, { page }); 
+  });
+
+  test('Corrigir o código postal após fechar o erro do checkout', async ({ Given, When, Then, And, page }) => { 
+    await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+    await And('tenho um produto no carrinho e inicio o checkout', null, { page }); 
+    await When('fecho o erro de código postal e informo um código válido', null, { page }); 
+    await Then('avanço para a revisão com a mochila no pedido', null, { page }); 
+  });
+
+  test('Retomar o checkout após cancelar o preenchimento', async ({ Given, When, Then, And, page }) => { 
+    await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+    await And('tenho um produto no carrinho e inicio o checkout', null, { page }); 
+    await When('cancelo o preenchimento e inicio o checkout novamente', null, { page }); 
+    await Then('o checkout é reaberto com a mochila no carrinho', null, { page }); 
+  });
+
+  test.describe('Entrar com cada conta de demonstração válida', () => {
+
+    test('Exemplos: #1', async ({ Given, When, Then, And, page }) => { 
+      await Given('que estou na página de login do SauceDemo', null, { page }); 
+      await When('entro com a conta "standard_user"', null, { page }); 
+      await Then('acesso a lista de produtos', null, { page }); 
+      await And('o catálogo apresenta seis produtos', null, { page }); 
+    });
+
+    test('Exemplos: #2', async ({ Given, When, Then, And, page }) => { 
+      await Given('que estou na página de login do SauceDemo', null, { page }); 
+      await When('entro com a conta "problem_user"', null, { page }); 
+      await Then('acesso a lista de produtos', null, { page }); 
+      await And('o catálogo apresenta seis produtos', null, { page }); 
+    });
+
+    test('Exemplos: #3', async ({ Given, When, Then, And, page }) => { 
+      await Given('que estou na página de login do SauceDemo', null, { page }); 
+      await When('entro com a conta "performance_glitch_user"', null, { page }); 
+      await Then('acesso a lista de produtos', null, { page }); 
+      await And('o catálogo apresenta seis produtos', null, { page }); 
+    });
+
+    test('Exemplos: #4', async ({ Given, When, Then, And, page }) => { 
+      await Given('que estou na página de login do SauceDemo', null, { page }); 
+      await When('entro com a conta "error_user"', null, { page }); 
+      await Then('acesso a lista de produtos', null, { page }); 
+      await And('o catálogo apresenta seis produtos', null, { page }); 
+    });
+
+    test('Exemplos: #5', async ({ Given, When, Then, And, page }) => { 
+      await Given('que estou na página de login do SauceDemo', null, { page }); 
+      await When('entro com a conta "visual_user"', null, { page }); 
+      await Then('acesso a lista de produtos', null, { page }); 
+      await And('o catálogo apresenta seis produtos', null, { page }); 
+    });
+
+  });
+
+  test.describe('Adicionar cada produto individualmente ao carrinho', () => {
+
+    test('Exemplos: #1', async ({ Given, When, Then, page }) => { 
+      await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+      await When('adiciono "Sauce Labs Backpack" ao carrinho', null, { page }); 
+      await Then('o carrinho contém apenas "Sauce Labs Backpack"', null, { page }); 
+    });
+
+    test('Exemplos: #2', async ({ Given, When, Then, page }) => { 
+      await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+      await When('adiciono "Sauce Labs Bike Light" ao carrinho', null, { page }); 
+      await Then('o carrinho contém apenas "Sauce Labs Bike Light"', null, { page }); 
+    });
+
+    test('Exemplos: #3', async ({ Given, When, Then, page }) => { 
+      await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+      await When('adiciono "Sauce Labs Bolt T-Shirt" ao carrinho', null, { page }); 
+      await Then('o carrinho contém apenas "Sauce Labs Bolt T-Shirt"', null, { page }); 
+    });
+
+    test('Exemplos: #4', async ({ Given, When, Then, page }) => { 
+      await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+      await When('adiciono "Sauce Labs Fleece Jacket" ao carrinho', null, { page }); 
+      await Then('o carrinho contém apenas "Sauce Labs Fleece Jacket"', null, { page }); 
+    });
+
+    test('Exemplos: #5', async ({ Given, When, Then, page }) => { 
+      await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+      await When('adiciono "Sauce Labs Onesie" ao carrinho', null, { page }); 
+      await Then('o carrinho contém apenas "Sauce Labs Onesie"', null, { page }); 
+    });
+
+    test('Exemplos: #6', async ({ Given, When, Then, page }) => { 
+      await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+      await When('adiciono "Test.allTheThings() T-Shirt (Red)" ao carrinho', null, { page }); 
+      await Then('o carrinho contém apenas "Test.allTheThings() T-Shirt (Red)"', null, { page }); 
+    });
+
+  });
+
+  test.describe('Consultar os detalhes de cada produto individualmente', () => {
+
+    test('Exemplos: #1', async ({ Given, When, Then, page }) => { 
+      await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+      await When('abro os detalhes de "Sauce Labs Backpack"', null, { page }); 
+      await Then('os detalhes apresentam nome, imagem, descrição e preço de "Sauce Labs Backpack"', null, { page }); 
+    });
+
+    test('Exemplos: #2', async ({ Given, When, Then, page }) => { 
+      await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+      await When('abro os detalhes de "Sauce Labs Bike Light"', null, { page }); 
+      await Then('os detalhes apresentam nome, imagem, descrição e preço de "Sauce Labs Bike Light"', null, { page }); 
+    });
+
+    test('Exemplos: #3', async ({ Given, When, Then, page }) => { 
+      await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+      await When('abro os detalhes de "Sauce Labs Bolt T-Shirt"', null, { page }); 
+      await Then('os detalhes apresentam nome, imagem, descrição e preço de "Sauce Labs Bolt T-Shirt"', null, { page }); 
+    });
+
+    test('Exemplos: #4', async ({ Given, When, Then, page }) => { 
+      await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+      await When('abro os detalhes de "Sauce Labs Fleece Jacket"', null, { page }); 
+      await Then('os detalhes apresentam nome, imagem, descrição e preço de "Sauce Labs Fleece Jacket"', null, { page }); 
+    });
+
+    test('Exemplos: #5', async ({ Given, When, Then, page }) => { 
+      await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+      await When('abro os detalhes de "Sauce Labs Onesie"', null, { page }); 
+      await Then('os detalhes apresentam nome, imagem, descrição e preço de "Sauce Labs Onesie"', null, { page }); 
+    });
+
+    test('Exemplos: #6', async ({ Given, When, Then, page }) => { 
+      await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+      await When('abro os detalhes de "Test.allTheThings() T-Shirt (Red)"', null, { page }); 
+      await Then('os detalhes apresentam nome, imagem, descrição e preço de "Test.allTheThings() T-Shirt (Red)"', null, { page }); 
+    });
+
+  });
+
+  test.describe('Conferir o cálculo do checkout para cada produto', () => {
+
+    test('Exemplos: #1', async ({ Given, When, Then, page }) => { 
+      await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+      await When('avanço para a revisão com "Sauce Labs Backpack"', null, { page }); 
+      await Then('o subtotal, imposto e total correspondem a "Sauce Labs Backpack"', null, { page }); 
+    });
+
+    test('Exemplos: #2', async ({ Given, When, Then, page }) => { 
+      await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+      await When('avanço para a revisão com "Sauce Labs Bike Light"', null, { page }); 
+      await Then('o subtotal, imposto e total correspondem a "Sauce Labs Bike Light"', null, { page }); 
+    });
+
+    test('Exemplos: #3', async ({ Given, When, Then, page }) => { 
+      await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+      await When('avanço para a revisão com "Sauce Labs Bolt T-Shirt"', null, { page }); 
+      await Then('o subtotal, imposto e total correspondem a "Sauce Labs Bolt T-Shirt"', null, { page }); 
+    });
+
+    test('Exemplos: #4', async ({ Given, When, Then, page }) => { 
+      await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+      await When('avanço para a revisão com "Sauce Labs Fleece Jacket"', null, { page }); 
+      await Then('o subtotal, imposto e total correspondem a "Sauce Labs Fleece Jacket"', null, { page }); 
+    });
+
+    test('Exemplos: #5', async ({ Given, When, Then, page }) => { 
+      await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+      await When('avanço para a revisão com "Sauce Labs Onesie"', null, { page }); 
+      await Then('o subtotal, imposto e total correspondem a "Sauce Labs Onesie"', null, { page }); 
+    });
+
+    test('Exemplos: #6', async ({ Given, When, Then, page }) => { 
+      await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+      await When('avanço para a revisão com "Test.allTheThings() T-Shirt (Red)"', null, { page }); 
+      await Then('o subtotal, imposto e total correspondem a "Test.allTheThings() T-Shirt (Red)"', null, { page }); 
+    });
+
+  });
+
+  test.describe('Remover cada produto do catálogo', () => {
+
+    test('Exemplos: #1', async ({ Given, When, Then, page }) => { 
+      await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+      await When('adiciono e removo "Sauce Labs Backpack" no catálogo', null, { page }); 
+      await Then('"Sauce Labs Backpack" volta a oferecer a opção de adicionar', null, { page }); 
+    });
+
+    test('Exemplos: #2', async ({ Given, When, Then, page }) => { 
+      await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+      await When('adiciono e removo "Sauce Labs Bike Light" no catálogo', null, { page }); 
+      await Then('"Sauce Labs Bike Light" volta a oferecer a opção de adicionar', null, { page }); 
+    });
+
+    test('Exemplos: #3', async ({ Given, When, Then, page }) => { 
+      await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+      await When('adiciono e removo "Sauce Labs Bolt T-Shirt" no catálogo', null, { page }); 
+      await Then('"Sauce Labs Bolt T-Shirt" volta a oferecer a opção de adicionar', null, { page }); 
+    });
+
+    test('Exemplos: #4', async ({ Given, When, Then, page }) => { 
+      await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+      await When('adiciono e removo "Sauce Labs Fleece Jacket" no catálogo', null, { page }); 
+      await Then('"Sauce Labs Fleece Jacket" volta a oferecer a opção de adicionar', null, { page }); 
+    });
+
+    test('Exemplos: #5', async ({ Given, When, Then, page }) => { 
+      await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+      await When('adiciono e removo "Sauce Labs Onesie" no catálogo', null, { page }); 
+      await Then('"Sauce Labs Onesie" volta a oferecer a opção de adicionar', null, { page }); 
+    });
+
+    test('Exemplos: #6', async ({ Given, When, Then, page }) => { 
+      await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+      await When('adiciono e removo "Test.allTheThings() T-Shirt (Red)" no catálogo', null, { page }); 
+      await Then('"Test.allTheThings() T-Shirt (Red)" volta a oferecer a opção de adicionar', null, { page }); 
+    });
+
+  });
+
+  test.describe('Manter o produto no carrinho para cada ordenação', () => {
+
+    test('Exemplos: #1', async ({ Given, When, Then, page }) => { 
+      await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+      await When('adiciono a mochila e aplico a ordenação "az"', null, { page }); 
+      await Then('o catálogo fica ordenado por "az" e a mochila permanece selecionada', null, { page }); 
+    });
+
+    test('Exemplos: #2', async ({ Given, When, Then, page }) => { 
+      await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+      await When('adiciono a mochila e aplico a ordenação "za"', null, { page }); 
+      await Then('o catálogo fica ordenado por "za" e a mochila permanece selecionada', null, { page }); 
+    });
+
+    test('Exemplos: #3', async ({ Given, When, Then, page }) => { 
+      await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+      await When('adiciono a mochila e aplico a ordenação "lohi"', null, { page }); 
+      await Then('o catálogo fica ordenado por "lohi" e a mochila permanece selecionada', null, { page }); 
+    });
+
+    test('Exemplos: #4', async ({ Given, When, Then, page }) => { 
+      await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+      await When('adiciono a mochila e aplico a ordenação "hilo"', null, { page }); 
+      await Then('o catálogo fica ordenado por "hilo" e a mochila permanece selecionada', null, { page }); 
+    });
+
+  });
+
+  test('Finalizar a compra da luz de bicicleta', async ({ Given, When, Then, page }) => { 
+    await Given('que acesso o SauceDemo com um usuário válido', null, { page }); 
+    await When('finalizo a compra da luz de bicicleta', null, { page }); 
+    await Then('a compra é confirmada e o carrinho fica vazio', null, { page }); 
+  });
+
 });
 
 // == technical section ==
@@ -419,4 +714,48 @@ const bddFileData = [ // bdd-data-start
   {"pwTestLine":337,"pickleLine":284,"tags":[],"steps":[{"pwStepLine":338,"gherkinStepLine":285,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":339,"gherkinStepLine":286,"keywordType":"Action","textWithKeyword":"Quando avanço para a revisão com dados de envio definidos","stepMatchArguments":[]},{"pwStepLine":340,"gherkinStepLine":287,"keywordType":"Outcome","textWithKeyword":"Então o resumo exibe as informações de pagamento e entrega esperadas","stepMatchArguments":[]}]},
   {"pwTestLine":343,"pickleLine":289,"tags":[],"steps":[{"pwStepLine":344,"gherkinStepLine":290,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":345,"gherkinStepLine":291,"keywordType":"Action","textWithKeyword":"Quando encerro a sessão e tento abrir diretamente o carrinho","stepMatchArguments":[]},{"pwStepLine":346,"gherkinStepLine":292,"keywordType":"Outcome","textWithKeyword":"Então sou redirecionado para a página de login","stepMatchArguments":[]}]},
   {"pwTestLine":349,"pickleLine":294,"tags":[],"steps":[{"pwStepLine":350,"gherkinStepLine":295,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":351,"gherkinStepLine":296,"keywordType":"Action","textWithKeyword":"Quando adiciono os seis produtos ao carrinho","stepMatchArguments":[]},{"pwStepLine":352,"gherkinStepLine":297,"keywordType":"Outcome","textWithKeyword":"Então cada produto exibe a opção para removê-lo do carrinho","stepMatchArguments":[]}]},
+  {"pwTestLine":355,"pickleLine":299,"tags":[],"steps":[{"pwStepLine":356,"gherkinStepLine":300,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":357,"gherkinStepLine":301,"keywordType":"Outcome","textWithKeyword":"Então o catálogo inicia ordenado alfabeticamente","stepMatchArguments":[]}]},
+  {"pwTestLine":360,"pickleLine":303,"tags":[],"steps":[{"pwStepLine":361,"gherkinStepLine":304,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":362,"gherkinStepLine":305,"keywordType":"Action","textWithKeyword":"Quando abro os detalhes da mochila pela imagem","stepMatchArguments":[]},{"pwStepLine":363,"gherkinStepLine":306,"keywordType":"Outcome","textWithKeyword":"Então vejo os detalhes da mochila Sauce Labs","stepMatchArguments":[]}]},
+  {"pwTestLine":366,"pickleLine":308,"tags":[],"steps":[{"pwStepLine":367,"gherkinStepLine":309,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":368,"gherkinStepLine":310,"keywordType":"Action","textWithKeyword":"Quando adiciono a mochila e verifico a ação disponível","stepMatchArguments":[]},{"pwStepLine":369,"gherkinStepLine":311,"keywordType":"Outcome","textWithKeyword":"Então o carrinho contém apenas uma mochila","stepMatchArguments":[]}]},
+  {"pwTestLine":372,"pickleLine":313,"tags":[],"steps":[{"pwStepLine":373,"gherkinStepLine":314,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":374,"gherkinStepLine":315,"keywordType":"Action","textWithKeyword":"Quando adiciono a mochila e ordeno os produtos por preço decrescente","stepMatchArguments":[]},{"pwStepLine":375,"gherkinStepLine":316,"keywordType":"Outcome","textWithKeyword":"Então a mochila permanece selecionada após a ordenação","stepMatchArguments":[]}]},
+  {"pwTestLine":378,"pickleLine":318,"tags":[],"steps":[{"pwStepLine":379,"gherkinStepLine":319,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":380,"gherkinStepLine":320,"keywordType":"Action","textWithKeyword":"Quando adiciono três produtos e removo a luz de bicicleta no carrinho","stepMatchArguments":[]},{"pwStepLine":381,"gherkinStepLine":321,"keywordType":"Outcome","textWithKeyword":"Então o carrinho indica dois produtos restantes","stepMatchArguments":[]}]},
+  {"pwTestLine":384,"pickleLine":323,"tags":[],"steps":[{"pwStepLine":385,"gherkinStepLine":324,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":386,"gherkinStepLine":325,"keywordType":"Action","textWithKeyword":"Quando abro os detalhes da mochila a partir do carrinho","stepMatchArguments":[]},{"pwStepLine":387,"gherkinStepLine":326,"keywordType":"Action","textWithKeyword":"E volto ao carrinho pelo navegador","stepMatchArguments":[]},{"pwStepLine":388,"gherkinStepLine":327,"keywordType":"Outcome","textWithKeyword":"Então a mochila continua no carrinho","stepMatchArguments":[]}]},
+  {"pwTestLine":391,"pickleLine":329,"tags":[],"steps":[{"pwStepLine":392,"gherkinStepLine":330,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":393,"gherkinStepLine":331,"keywordType":"Action","textWithKeyword":"Quando abro o carrinho com a mochila e volto pelo navegador","stepMatchArguments":[]},{"pwStepLine":394,"gherkinStepLine":332,"keywordType":"Outcome","textWithKeyword":"Então a mochila continua selecionada no catálogo","stepMatchArguments":[]}]},
+  {"pwTestLine":397,"pickleLine":334,"tags":[],"steps":[{"pwStepLine":398,"gherkinStepLine":335,"keywordType":"Context","textWithKeyword":"Dado que estou na página de login do SauceDemo","stepMatchArguments":[]},{"pwStepLine":399,"gherkinStepLine":336,"keywordType":"Action","textWithKeyword":"Quando fecho o erro de login e entro com credenciais válidas","stepMatchArguments":[]},{"pwStepLine":400,"gherkinStepLine":337,"keywordType":"Outcome","textWithKeyword":"Então acesso a lista de produtos","stepMatchArguments":[]}]},
+  {"pwTestLine":403,"pickleLine":339,"tags":[],"steps":[{"pwStepLine":404,"gherkinStepLine":340,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":405,"gherkinStepLine":341,"keywordType":"Context","textWithKeyword":"E tenho um produto no carrinho e inicio o checkout","stepMatchArguments":[]},{"pwStepLine":406,"gherkinStepLine":342,"keywordType":"Action","textWithKeyword":"Quando fecho o erro de código postal e informo um código válido","stepMatchArguments":[]},{"pwStepLine":407,"gherkinStepLine":343,"keywordType":"Outcome","textWithKeyword":"Então avanço para a revisão com a mochila no pedido","stepMatchArguments":[]}]},
+  {"pwTestLine":410,"pickleLine":345,"tags":[],"steps":[{"pwStepLine":411,"gherkinStepLine":346,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":412,"gherkinStepLine":347,"keywordType":"Context","textWithKeyword":"E tenho um produto no carrinho e inicio o checkout","stepMatchArguments":[]},{"pwStepLine":413,"gherkinStepLine":348,"keywordType":"Action","textWithKeyword":"Quando cancelo o preenchimento e inicio o checkout novamente","stepMatchArguments":[]},{"pwStepLine":414,"gherkinStepLine":349,"keywordType":"Outcome","textWithKeyword":"Então o checkout é reaberto com a mochila no carrinho","stepMatchArguments":[]}]},
+  {"pwTestLine":419,"pickleLine":359,"tags":[],"steps":[{"pwStepLine":420,"gherkinStepLine":352,"keywordType":"Context","textWithKeyword":"Dado que estou na página de login do SauceDemo","stepMatchArguments":[]},{"pwStepLine":421,"gherkinStepLine":353,"keywordType":"Action","textWithKeyword":"Quando entro com a conta \"standard_user\"","stepMatchArguments":[{"group":{"start":18,"value":"\"standard_user\"","children":[{"start":19,"value":"standard_user","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":422,"gherkinStepLine":354,"keywordType":"Outcome","textWithKeyword":"Então acesso a lista de produtos","stepMatchArguments":[]},{"pwStepLine":423,"gherkinStepLine":355,"keywordType":"Outcome","textWithKeyword":"E o catálogo apresenta seis produtos","stepMatchArguments":[]}]},
+  {"pwTestLine":426,"pickleLine":360,"tags":[],"steps":[{"pwStepLine":427,"gherkinStepLine":352,"keywordType":"Context","textWithKeyword":"Dado que estou na página de login do SauceDemo","stepMatchArguments":[]},{"pwStepLine":428,"gherkinStepLine":353,"keywordType":"Action","textWithKeyword":"Quando entro com a conta \"problem_user\"","stepMatchArguments":[{"group":{"start":18,"value":"\"problem_user\"","children":[{"start":19,"value":"problem_user","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":429,"gherkinStepLine":354,"keywordType":"Outcome","textWithKeyword":"Então acesso a lista de produtos","stepMatchArguments":[]},{"pwStepLine":430,"gherkinStepLine":355,"keywordType":"Outcome","textWithKeyword":"E o catálogo apresenta seis produtos","stepMatchArguments":[]}]},
+  {"pwTestLine":433,"pickleLine":361,"tags":[],"steps":[{"pwStepLine":434,"gherkinStepLine":352,"keywordType":"Context","textWithKeyword":"Dado que estou na página de login do SauceDemo","stepMatchArguments":[]},{"pwStepLine":435,"gherkinStepLine":353,"keywordType":"Action","textWithKeyword":"Quando entro com a conta \"performance_glitch_user\"","stepMatchArguments":[{"group":{"start":18,"value":"\"performance_glitch_user\"","children":[{"start":19,"value":"performance_glitch_user","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":436,"gherkinStepLine":354,"keywordType":"Outcome","textWithKeyword":"Então acesso a lista de produtos","stepMatchArguments":[]},{"pwStepLine":437,"gherkinStepLine":355,"keywordType":"Outcome","textWithKeyword":"E o catálogo apresenta seis produtos","stepMatchArguments":[]}]},
+  {"pwTestLine":440,"pickleLine":362,"tags":[],"steps":[{"pwStepLine":441,"gherkinStepLine":352,"keywordType":"Context","textWithKeyword":"Dado que estou na página de login do SauceDemo","stepMatchArguments":[]},{"pwStepLine":442,"gherkinStepLine":353,"keywordType":"Action","textWithKeyword":"Quando entro com a conta \"error_user\"","stepMatchArguments":[{"group":{"start":18,"value":"\"error_user\"","children":[{"start":19,"value":"error_user","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":443,"gherkinStepLine":354,"keywordType":"Outcome","textWithKeyword":"Então acesso a lista de produtos","stepMatchArguments":[]},{"pwStepLine":444,"gherkinStepLine":355,"keywordType":"Outcome","textWithKeyword":"E o catálogo apresenta seis produtos","stepMatchArguments":[]}]},
+  {"pwTestLine":447,"pickleLine":363,"tags":[],"steps":[{"pwStepLine":448,"gherkinStepLine":352,"keywordType":"Context","textWithKeyword":"Dado que estou na página de login do SauceDemo","stepMatchArguments":[]},{"pwStepLine":449,"gherkinStepLine":353,"keywordType":"Action","textWithKeyword":"Quando entro com a conta \"visual_user\"","stepMatchArguments":[{"group":{"start":18,"value":"\"visual_user\"","children":[{"start":19,"value":"visual_user","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":450,"gherkinStepLine":354,"keywordType":"Outcome","textWithKeyword":"Então acesso a lista de produtos","stepMatchArguments":[]},{"pwStepLine":451,"gherkinStepLine":355,"keywordType":"Outcome","textWithKeyword":"E o catálogo apresenta seis produtos","stepMatchArguments":[]}]},
+  {"pwTestLine":458,"pickleLine":372,"tags":[],"steps":[{"pwStepLine":459,"gherkinStepLine":366,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":460,"gherkinStepLine":367,"keywordType":"Action","textWithKeyword":"Quando adiciono \"Sauce Labs Backpack\" ao carrinho","stepMatchArguments":[{"group":{"start":9,"value":"\"Sauce Labs Backpack\"","children":[{"start":10,"value":"Sauce Labs Backpack","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":461,"gherkinStepLine":368,"keywordType":"Outcome","textWithKeyword":"Então o carrinho contém apenas \"Sauce Labs Backpack\"","stepMatchArguments":[{"group":{"start":25,"value":"\"Sauce Labs Backpack\"","children":[{"start":26,"value":"Sauce Labs Backpack","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]}]},
+  {"pwTestLine":464,"pickleLine":373,"tags":[],"steps":[{"pwStepLine":465,"gherkinStepLine":366,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":466,"gherkinStepLine":367,"keywordType":"Action","textWithKeyword":"Quando adiciono \"Sauce Labs Bike Light\" ao carrinho","stepMatchArguments":[{"group":{"start":9,"value":"\"Sauce Labs Bike Light\"","children":[{"start":10,"value":"Sauce Labs Bike Light","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":467,"gherkinStepLine":368,"keywordType":"Outcome","textWithKeyword":"Então o carrinho contém apenas \"Sauce Labs Bike Light\"","stepMatchArguments":[{"group":{"start":25,"value":"\"Sauce Labs Bike Light\"","children":[{"start":26,"value":"Sauce Labs Bike Light","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]}]},
+  {"pwTestLine":470,"pickleLine":374,"tags":[],"steps":[{"pwStepLine":471,"gherkinStepLine":366,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":472,"gherkinStepLine":367,"keywordType":"Action","textWithKeyword":"Quando adiciono \"Sauce Labs Bolt T-Shirt\" ao carrinho","stepMatchArguments":[{"group":{"start":9,"value":"\"Sauce Labs Bolt T-Shirt\"","children":[{"start":10,"value":"Sauce Labs Bolt T-Shirt","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":473,"gherkinStepLine":368,"keywordType":"Outcome","textWithKeyword":"Então o carrinho contém apenas \"Sauce Labs Bolt T-Shirt\"","stepMatchArguments":[{"group":{"start":25,"value":"\"Sauce Labs Bolt T-Shirt\"","children":[{"start":26,"value":"Sauce Labs Bolt T-Shirt","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]}]},
+  {"pwTestLine":476,"pickleLine":375,"tags":[],"steps":[{"pwStepLine":477,"gherkinStepLine":366,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":478,"gherkinStepLine":367,"keywordType":"Action","textWithKeyword":"Quando adiciono \"Sauce Labs Fleece Jacket\" ao carrinho","stepMatchArguments":[{"group":{"start":9,"value":"\"Sauce Labs Fleece Jacket\"","children":[{"start":10,"value":"Sauce Labs Fleece Jacket","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":479,"gherkinStepLine":368,"keywordType":"Outcome","textWithKeyword":"Então o carrinho contém apenas \"Sauce Labs Fleece Jacket\"","stepMatchArguments":[{"group":{"start":25,"value":"\"Sauce Labs Fleece Jacket\"","children":[{"start":26,"value":"Sauce Labs Fleece Jacket","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]}]},
+  {"pwTestLine":482,"pickleLine":376,"tags":[],"steps":[{"pwStepLine":483,"gherkinStepLine":366,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":484,"gherkinStepLine":367,"keywordType":"Action","textWithKeyword":"Quando adiciono \"Sauce Labs Onesie\" ao carrinho","stepMatchArguments":[{"group":{"start":9,"value":"\"Sauce Labs Onesie\"","children":[{"start":10,"value":"Sauce Labs Onesie","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":485,"gherkinStepLine":368,"keywordType":"Outcome","textWithKeyword":"Então o carrinho contém apenas \"Sauce Labs Onesie\"","stepMatchArguments":[{"group":{"start":25,"value":"\"Sauce Labs Onesie\"","children":[{"start":26,"value":"Sauce Labs Onesie","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]}]},
+  {"pwTestLine":488,"pickleLine":377,"tags":[],"steps":[{"pwStepLine":489,"gherkinStepLine":366,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":490,"gherkinStepLine":367,"keywordType":"Action","textWithKeyword":"Quando adiciono \"Test.allTheThings() T-Shirt (Red)\" ao carrinho","stepMatchArguments":[{"group":{"start":9,"value":"\"Test.allTheThings() T-Shirt (Red)\"","children":[{"start":10,"value":"Test.allTheThings() T-Shirt (Red)","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":491,"gherkinStepLine":368,"keywordType":"Outcome","textWithKeyword":"Então o carrinho contém apenas \"Test.allTheThings() T-Shirt (Red)\"","stepMatchArguments":[{"group":{"start":25,"value":"\"Test.allTheThings() T-Shirt (Red)\"","children":[{"start":26,"value":"Test.allTheThings() T-Shirt (Red)","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]}]},
+  {"pwTestLine":498,"pickleLine":386,"tags":[],"steps":[{"pwStepLine":499,"gherkinStepLine":380,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":500,"gherkinStepLine":381,"keywordType":"Action","textWithKeyword":"Quando abro os detalhes de \"Sauce Labs Backpack\"","stepMatchArguments":[{"group":{"start":20,"value":"\"Sauce Labs Backpack\"","children":[{"start":21,"value":"Sauce Labs Backpack","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":501,"gherkinStepLine":382,"keywordType":"Outcome","textWithKeyword":"Então os detalhes apresentam nome, imagem, descrição e preço de \"Sauce Labs Backpack\"","stepMatchArguments":[{"group":{"start":58,"value":"\"Sauce Labs Backpack\"","children":[{"start":59,"value":"Sauce Labs Backpack","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]}]},
+  {"pwTestLine":504,"pickleLine":387,"tags":[],"steps":[{"pwStepLine":505,"gherkinStepLine":380,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":506,"gherkinStepLine":381,"keywordType":"Action","textWithKeyword":"Quando abro os detalhes de \"Sauce Labs Bike Light\"","stepMatchArguments":[{"group":{"start":20,"value":"\"Sauce Labs Bike Light\"","children":[{"start":21,"value":"Sauce Labs Bike Light","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":507,"gherkinStepLine":382,"keywordType":"Outcome","textWithKeyword":"Então os detalhes apresentam nome, imagem, descrição e preço de \"Sauce Labs Bike Light\"","stepMatchArguments":[{"group":{"start":58,"value":"\"Sauce Labs Bike Light\"","children":[{"start":59,"value":"Sauce Labs Bike Light","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]}]},
+  {"pwTestLine":510,"pickleLine":388,"tags":[],"steps":[{"pwStepLine":511,"gherkinStepLine":380,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":512,"gherkinStepLine":381,"keywordType":"Action","textWithKeyword":"Quando abro os detalhes de \"Sauce Labs Bolt T-Shirt\"","stepMatchArguments":[{"group":{"start":20,"value":"\"Sauce Labs Bolt T-Shirt\"","children":[{"start":21,"value":"Sauce Labs Bolt T-Shirt","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":513,"gherkinStepLine":382,"keywordType":"Outcome","textWithKeyword":"Então os detalhes apresentam nome, imagem, descrição e preço de \"Sauce Labs Bolt T-Shirt\"","stepMatchArguments":[{"group":{"start":58,"value":"\"Sauce Labs Bolt T-Shirt\"","children":[{"start":59,"value":"Sauce Labs Bolt T-Shirt","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]}]},
+  {"pwTestLine":516,"pickleLine":389,"tags":[],"steps":[{"pwStepLine":517,"gherkinStepLine":380,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":518,"gherkinStepLine":381,"keywordType":"Action","textWithKeyword":"Quando abro os detalhes de \"Sauce Labs Fleece Jacket\"","stepMatchArguments":[{"group":{"start":20,"value":"\"Sauce Labs Fleece Jacket\"","children":[{"start":21,"value":"Sauce Labs Fleece Jacket","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":519,"gherkinStepLine":382,"keywordType":"Outcome","textWithKeyword":"Então os detalhes apresentam nome, imagem, descrição e preço de \"Sauce Labs Fleece Jacket\"","stepMatchArguments":[{"group":{"start":58,"value":"\"Sauce Labs Fleece Jacket\"","children":[{"start":59,"value":"Sauce Labs Fleece Jacket","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]}]},
+  {"pwTestLine":522,"pickleLine":390,"tags":[],"steps":[{"pwStepLine":523,"gherkinStepLine":380,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":524,"gherkinStepLine":381,"keywordType":"Action","textWithKeyword":"Quando abro os detalhes de \"Sauce Labs Onesie\"","stepMatchArguments":[{"group":{"start":20,"value":"\"Sauce Labs Onesie\"","children":[{"start":21,"value":"Sauce Labs Onesie","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":525,"gherkinStepLine":382,"keywordType":"Outcome","textWithKeyword":"Então os detalhes apresentam nome, imagem, descrição e preço de \"Sauce Labs Onesie\"","stepMatchArguments":[{"group":{"start":58,"value":"\"Sauce Labs Onesie\"","children":[{"start":59,"value":"Sauce Labs Onesie","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]}]},
+  {"pwTestLine":528,"pickleLine":391,"tags":[],"steps":[{"pwStepLine":529,"gherkinStepLine":380,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":530,"gherkinStepLine":381,"keywordType":"Action","textWithKeyword":"Quando abro os detalhes de \"Test.allTheThings() T-Shirt (Red)\"","stepMatchArguments":[{"group":{"start":20,"value":"\"Test.allTheThings() T-Shirt (Red)\"","children":[{"start":21,"value":"Test.allTheThings() T-Shirt (Red)","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":531,"gherkinStepLine":382,"keywordType":"Outcome","textWithKeyword":"Então os detalhes apresentam nome, imagem, descrição e preço de \"Test.allTheThings() T-Shirt (Red)\"","stepMatchArguments":[{"group":{"start":58,"value":"\"Test.allTheThings() T-Shirt (Red)\"","children":[{"start":59,"value":"Test.allTheThings() T-Shirt (Red)","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]}]},
+  {"pwTestLine":538,"pickleLine":400,"tags":[],"steps":[{"pwStepLine":539,"gherkinStepLine":394,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":540,"gherkinStepLine":395,"keywordType":"Action","textWithKeyword":"Quando avanço para a revisão com \"Sauce Labs Backpack\"","stepMatchArguments":[{"group":{"start":26,"value":"\"Sauce Labs Backpack\"","children":[{"start":27,"value":"Sauce Labs Backpack","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":541,"gherkinStepLine":396,"keywordType":"Outcome","textWithKeyword":"Então o subtotal, imposto e total correspondem a \"Sauce Labs Backpack\"","stepMatchArguments":[{"group":{"start":43,"value":"\"Sauce Labs Backpack\"","children":[{"start":44,"value":"Sauce Labs Backpack","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]}]},
+  {"pwTestLine":544,"pickleLine":401,"tags":[],"steps":[{"pwStepLine":545,"gherkinStepLine":394,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":546,"gherkinStepLine":395,"keywordType":"Action","textWithKeyword":"Quando avanço para a revisão com \"Sauce Labs Bike Light\"","stepMatchArguments":[{"group":{"start":26,"value":"\"Sauce Labs Bike Light\"","children":[{"start":27,"value":"Sauce Labs Bike Light","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":547,"gherkinStepLine":396,"keywordType":"Outcome","textWithKeyword":"Então o subtotal, imposto e total correspondem a \"Sauce Labs Bike Light\"","stepMatchArguments":[{"group":{"start":43,"value":"\"Sauce Labs Bike Light\"","children":[{"start":44,"value":"Sauce Labs Bike Light","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]}]},
+  {"pwTestLine":550,"pickleLine":402,"tags":[],"steps":[{"pwStepLine":551,"gherkinStepLine":394,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":552,"gherkinStepLine":395,"keywordType":"Action","textWithKeyword":"Quando avanço para a revisão com \"Sauce Labs Bolt T-Shirt\"","stepMatchArguments":[{"group":{"start":26,"value":"\"Sauce Labs Bolt T-Shirt\"","children":[{"start":27,"value":"Sauce Labs Bolt T-Shirt","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":553,"gherkinStepLine":396,"keywordType":"Outcome","textWithKeyword":"Então o subtotal, imposto e total correspondem a \"Sauce Labs Bolt T-Shirt\"","stepMatchArguments":[{"group":{"start":43,"value":"\"Sauce Labs Bolt T-Shirt\"","children":[{"start":44,"value":"Sauce Labs Bolt T-Shirt","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]}]},
+  {"pwTestLine":556,"pickleLine":403,"tags":[],"steps":[{"pwStepLine":557,"gherkinStepLine":394,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":558,"gherkinStepLine":395,"keywordType":"Action","textWithKeyword":"Quando avanço para a revisão com \"Sauce Labs Fleece Jacket\"","stepMatchArguments":[{"group":{"start":26,"value":"\"Sauce Labs Fleece Jacket\"","children":[{"start":27,"value":"Sauce Labs Fleece Jacket","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":559,"gherkinStepLine":396,"keywordType":"Outcome","textWithKeyword":"Então o subtotal, imposto e total correspondem a \"Sauce Labs Fleece Jacket\"","stepMatchArguments":[{"group":{"start":43,"value":"\"Sauce Labs Fleece Jacket\"","children":[{"start":44,"value":"Sauce Labs Fleece Jacket","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]}]},
+  {"pwTestLine":562,"pickleLine":404,"tags":[],"steps":[{"pwStepLine":563,"gherkinStepLine":394,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":564,"gherkinStepLine":395,"keywordType":"Action","textWithKeyword":"Quando avanço para a revisão com \"Sauce Labs Onesie\"","stepMatchArguments":[{"group":{"start":26,"value":"\"Sauce Labs Onesie\"","children":[{"start":27,"value":"Sauce Labs Onesie","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":565,"gherkinStepLine":396,"keywordType":"Outcome","textWithKeyword":"Então o subtotal, imposto e total correspondem a \"Sauce Labs Onesie\"","stepMatchArguments":[{"group":{"start":43,"value":"\"Sauce Labs Onesie\"","children":[{"start":44,"value":"Sauce Labs Onesie","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]}]},
+  {"pwTestLine":568,"pickleLine":405,"tags":[],"steps":[{"pwStepLine":569,"gherkinStepLine":394,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":570,"gherkinStepLine":395,"keywordType":"Action","textWithKeyword":"Quando avanço para a revisão com \"Test.allTheThings() T-Shirt (Red)\"","stepMatchArguments":[{"group":{"start":26,"value":"\"Test.allTheThings() T-Shirt (Red)\"","children":[{"start":27,"value":"Test.allTheThings() T-Shirt (Red)","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":571,"gherkinStepLine":396,"keywordType":"Outcome","textWithKeyword":"Então o subtotal, imposto e total correspondem a \"Test.allTheThings() T-Shirt (Red)\"","stepMatchArguments":[{"group":{"start":43,"value":"\"Test.allTheThings() T-Shirt (Red)\"","children":[{"start":44,"value":"Test.allTheThings() T-Shirt (Red)","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]}]},
+  {"pwTestLine":578,"pickleLine":414,"tags":[],"steps":[{"pwStepLine":579,"gherkinStepLine":408,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":580,"gherkinStepLine":409,"keywordType":"Action","textWithKeyword":"Quando adiciono e removo \"Sauce Labs Backpack\" no catálogo","stepMatchArguments":[{"group":{"start":18,"value":"\"Sauce Labs Backpack\"","children":[{"start":19,"value":"Sauce Labs Backpack","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":581,"gherkinStepLine":410,"keywordType":"Outcome","textWithKeyword":"Então \"Sauce Labs Backpack\" volta a oferecer a opção de adicionar","stepMatchArguments":[{"group":{"start":0,"value":"\"Sauce Labs Backpack\"","children":[{"start":1,"value":"Sauce Labs Backpack","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]}]},
+  {"pwTestLine":584,"pickleLine":415,"tags":[],"steps":[{"pwStepLine":585,"gherkinStepLine":408,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":586,"gherkinStepLine":409,"keywordType":"Action","textWithKeyword":"Quando adiciono e removo \"Sauce Labs Bike Light\" no catálogo","stepMatchArguments":[{"group":{"start":18,"value":"\"Sauce Labs Bike Light\"","children":[{"start":19,"value":"Sauce Labs Bike Light","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":587,"gherkinStepLine":410,"keywordType":"Outcome","textWithKeyword":"Então \"Sauce Labs Bike Light\" volta a oferecer a opção de adicionar","stepMatchArguments":[{"group":{"start":0,"value":"\"Sauce Labs Bike Light\"","children":[{"start":1,"value":"Sauce Labs Bike Light","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]}]},
+  {"pwTestLine":590,"pickleLine":416,"tags":[],"steps":[{"pwStepLine":591,"gherkinStepLine":408,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":592,"gherkinStepLine":409,"keywordType":"Action","textWithKeyword":"Quando adiciono e removo \"Sauce Labs Bolt T-Shirt\" no catálogo","stepMatchArguments":[{"group":{"start":18,"value":"\"Sauce Labs Bolt T-Shirt\"","children":[{"start":19,"value":"Sauce Labs Bolt T-Shirt","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":593,"gherkinStepLine":410,"keywordType":"Outcome","textWithKeyword":"Então \"Sauce Labs Bolt T-Shirt\" volta a oferecer a opção de adicionar","stepMatchArguments":[{"group":{"start":0,"value":"\"Sauce Labs Bolt T-Shirt\"","children":[{"start":1,"value":"Sauce Labs Bolt T-Shirt","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]}]},
+  {"pwTestLine":596,"pickleLine":417,"tags":[],"steps":[{"pwStepLine":597,"gherkinStepLine":408,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":598,"gherkinStepLine":409,"keywordType":"Action","textWithKeyword":"Quando adiciono e removo \"Sauce Labs Fleece Jacket\" no catálogo","stepMatchArguments":[{"group":{"start":18,"value":"\"Sauce Labs Fleece Jacket\"","children":[{"start":19,"value":"Sauce Labs Fleece Jacket","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":599,"gherkinStepLine":410,"keywordType":"Outcome","textWithKeyword":"Então \"Sauce Labs Fleece Jacket\" volta a oferecer a opção de adicionar","stepMatchArguments":[{"group":{"start":0,"value":"\"Sauce Labs Fleece Jacket\"","children":[{"start":1,"value":"Sauce Labs Fleece Jacket","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]}]},
+  {"pwTestLine":602,"pickleLine":418,"tags":[],"steps":[{"pwStepLine":603,"gherkinStepLine":408,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":604,"gherkinStepLine":409,"keywordType":"Action","textWithKeyword":"Quando adiciono e removo \"Sauce Labs Onesie\" no catálogo","stepMatchArguments":[{"group":{"start":18,"value":"\"Sauce Labs Onesie\"","children":[{"start":19,"value":"Sauce Labs Onesie","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":605,"gherkinStepLine":410,"keywordType":"Outcome","textWithKeyword":"Então \"Sauce Labs Onesie\" volta a oferecer a opção de adicionar","stepMatchArguments":[{"group":{"start":0,"value":"\"Sauce Labs Onesie\"","children":[{"start":1,"value":"Sauce Labs Onesie","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]}]},
+  {"pwTestLine":608,"pickleLine":419,"tags":[],"steps":[{"pwStepLine":609,"gherkinStepLine":408,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":610,"gherkinStepLine":409,"keywordType":"Action","textWithKeyword":"Quando adiciono e removo \"Test.allTheThings() T-Shirt (Red)\" no catálogo","stepMatchArguments":[{"group":{"start":18,"value":"\"Test.allTheThings() T-Shirt (Red)\"","children":[{"start":19,"value":"Test.allTheThings() T-Shirt (Red)","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":611,"gherkinStepLine":410,"keywordType":"Outcome","textWithKeyword":"Então \"Test.allTheThings() T-Shirt (Red)\" volta a oferecer a opção de adicionar","stepMatchArguments":[{"group":{"start":0,"value":"\"Test.allTheThings() T-Shirt (Red)\"","children":[{"start":1,"value":"Test.allTheThings() T-Shirt (Red)","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]}]},
+  {"pwTestLine":618,"pickleLine":428,"tags":[],"steps":[{"pwStepLine":619,"gherkinStepLine":422,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":620,"gherkinStepLine":423,"keywordType":"Action","textWithKeyword":"Quando adiciono a mochila e aplico a ordenação \"az\"","stepMatchArguments":[{"group":{"start":40,"value":"\"az\"","children":[{"start":41,"value":"az","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":621,"gherkinStepLine":424,"keywordType":"Outcome","textWithKeyword":"Então o catálogo fica ordenado por \"az\" e a mochila permanece selecionada","stepMatchArguments":[{"group":{"start":29,"value":"\"az\"","children":[{"start":30,"value":"az","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]}]},
+  {"pwTestLine":624,"pickleLine":429,"tags":[],"steps":[{"pwStepLine":625,"gherkinStepLine":422,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":626,"gherkinStepLine":423,"keywordType":"Action","textWithKeyword":"Quando adiciono a mochila e aplico a ordenação \"za\"","stepMatchArguments":[{"group":{"start":40,"value":"\"za\"","children":[{"start":41,"value":"za","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":627,"gherkinStepLine":424,"keywordType":"Outcome","textWithKeyword":"Então o catálogo fica ordenado por \"za\" e a mochila permanece selecionada","stepMatchArguments":[{"group":{"start":29,"value":"\"za\"","children":[{"start":30,"value":"za","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]}]},
+  {"pwTestLine":630,"pickleLine":430,"tags":[],"steps":[{"pwStepLine":631,"gherkinStepLine":422,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":632,"gherkinStepLine":423,"keywordType":"Action","textWithKeyword":"Quando adiciono a mochila e aplico a ordenação \"lohi\"","stepMatchArguments":[{"group":{"start":40,"value":"\"lohi\"","children":[{"start":41,"value":"lohi","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":633,"gherkinStepLine":424,"keywordType":"Outcome","textWithKeyword":"Então o catálogo fica ordenado por \"lohi\" e a mochila permanece selecionada","stepMatchArguments":[{"group":{"start":29,"value":"\"lohi\"","children":[{"start":30,"value":"lohi","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]}]},
+  {"pwTestLine":636,"pickleLine":431,"tags":[],"steps":[{"pwStepLine":637,"gherkinStepLine":422,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":638,"gherkinStepLine":423,"keywordType":"Action","textWithKeyword":"Quando adiciono a mochila e aplico a ordenação \"hilo\"","stepMatchArguments":[{"group":{"start":40,"value":"\"hilo\"","children":[{"start":41,"value":"hilo","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":639,"gherkinStepLine":424,"keywordType":"Outcome","textWithKeyword":"Então o catálogo fica ordenado por \"hilo\" e a mochila permanece selecionada","stepMatchArguments":[{"group":{"start":29,"value":"\"hilo\"","children":[{"start":30,"value":"hilo","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]}]},
+  {"pwTestLine":644,"pickleLine":433,"tags":[],"steps":[{"pwStepLine":645,"gherkinStepLine":434,"keywordType":"Context","textWithKeyword":"Dado que acesso o SauceDemo com um usuário válido","stepMatchArguments":[]},{"pwStepLine":646,"gherkinStepLine":435,"keywordType":"Action","textWithKeyword":"Quando finalizo a compra da luz de bicicleta","stepMatchArguments":[]},{"pwStepLine":647,"gherkinStepLine":436,"keywordType":"Outcome","textWithKeyword":"Então a compra é confirmada e o carrinho fica vazio","stepMatchArguments":[]}]},
 ]; // bdd-data-end
